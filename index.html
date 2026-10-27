@@ -114,6 +114,52 @@
     .brand-mark{background:linear-gradient(145deg,#35a3ff,#1264e8);box-shadow:0 7px 22px #1688ff45}
     .nav-links a:not(.btn){color:#d2e2f4}
     .nav-links a:not(.btn):hover{color:#7dc2ff}
+
+    /* Nova composição estrutural: faixa de resumo, cards em grade e formulário editorial */
+    .hero-grid{grid-template-columns:minmax(0,1fr) minmax(390px,.88fr);align-items:center;gap:clamp(36px,6vw,82px)}
+    .hero-copy{max-width:520px}
+    .hero-actions{gap:14px}
+    .hero-card{transform:translateY(8px);border-radius:26px;padding:30px;box-shadow:0 30px 85px #020b1b66}
+    .hero-card:before{content:"SIMULAÇÃO ILUSTRATIVA";display:block;color:#1264e8;font-size:.68rem;letter-spacing:1.5px;font-weight:900;margin-bottom:15px}
+    .benefit-strip{background:#fff;border-bottom:1px solid #e0e9f3;padding:22px 0}
+    .benefit-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .benefit-point{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 20px;border-right:1px solid #e0e9f3}
+    .benefit-point:last-child{border-right:0}
+    .benefit-point-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:#e8f2ff;color:#1264e8;font-size:1.25rem}
+    .benefit-point strong{display:block;color:#102a43;font-size:.91rem}
+    .benefit-point small{display:block;color:#6b8299;font-size:.78rem}
+    .section-head{text-align:left;margin:0 0 34px;max-width:740px}
+    .section-head h2{font-size:clamp(2rem,4vw,3rem);letter-spacing:-1.4px}
+    .section-head p{max-width:590px;font-size:1.02rem}
+    #como-funciona .features{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+    #como-funciona .feature{position:relative;min-height:220px;padding:28px 27px 25px 30px;overflow:hidden}
+    #como-funciona .feature:after{content:"";position:absolute;right:-28px;bottom:-38px;width:110px;height:110px;border-radius:50%;background:#edf5ff}
+    #como-funciona .feature-icon{position:relative;z-index:1;width:54px;height:54px;border-radius:17px;font-size:1.5rem}
+    #como-funciona .feature h3,#como-funciona .feature p{position:relative;z-index:1}
+    #solicitacao .application-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(28px,5vw,70px)}
+    .application-info{position:sticky;top:110px}
+    .application-info .eyebrow{margin-bottom:8px}
+    .steps{gap:20px}
+    .step-num{box-shadow:0 0 0 6px #e1efff}
+    .form-card{padding:clamp(22px,3vw,36px)}
+    .form-card h3{font-size:1.65rem;letter-spacing:-.6px}
+    .form-card .field{margin-top:20px}
+    .form-card input:not([type=range]),.form-card select{padding:14px;border-radius:12px;background:#fbfdff}
+    .tracking-band{position:relative;overflow:hidden}
+    .tracking-band:after{content:"↗";position:absolute;right:32%;top:-32px;font-size:9rem;line-height:1;color:#1264e80c;font-weight:900;pointer-events:none}
+    @media(max-width:800px){
+      .hero-grid{grid-template-columns:1fr;gap:30px}
+      .hero-card{transform:none}
+      .benefit-strip-grid{grid-template-columns:1fr;gap:8px}
+      .benefit-point{justify-content:flex-start;border-right:0;border-bottom:1px solid #e0e9f3;padding:12px 4px}
+      .benefit-point:last-child{border-bottom:0}
+      .section-head{text-align:center;margin-inline:auto}
+      #como-funciona .features{grid-template-columns:1fr}
+      #como-funciona .feature{min-height:0}
+      #solicitacao .application-grid{grid-template-columns:1fr}
+      .application-info{position:static}
+    }
+
     .hero{padding:88px 0 82px;background:radial-gradient(ellipse at 88% 8%,#164d86 0,transparent 38%),radial-gradient(ellipse at 4% 100%,#103c6c 0,transparent 42%),linear-gradient(125deg,#07192f 0%,#0b2b50 58%,#0b3e78 100%)}
     .hero:before{border-color:#8bc6ff35;box-shadow:0 0 0 38px #d4e7ff0a,0 0 0 78px #d4e7ff08}
     .hero-grid{grid-template-columns:1.08fr .92fr;gap:64px}
@@ -207,6 +253,14 @@
       </div>
     </section>
 
+    <section class="benefit-strip" aria-label="Informações importantes">
+      <div class="container benefit-strip-grid">
+        <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">⌁</span><span><strong>Simulação gratuita</strong><small>Consulte valores sem compromisso</small></span></div>
+        <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">◷</span><span><strong>Você decide o próximo passo</strong><small>Revise os dados antes de enviar</small></span></div>
+        <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">✓</span><span><strong>Transparência primeiro</strong><small>Estimativas claramente identificadas</small></span></div>
+      </div>
+    </section>
+
     <section class="section section-white" id="como-funciona">
       <div class="container">
         <div class="section-head">
@@ -215,9 +269,9 @@
           <p>Consulte uma estimativa e entenda o que acontece antes de qualquer contratação.</p>
         </div>
         <div class="features">
-          <article class="feature"><div class="feature-icon" aria-hidden="true">🧮</div><h3>1. Faça uma simulação</h3><p>Escolha um valor e um prazo para visualizar uma estimativa de parcelas mensais.</p></article>
-          <article class="feature"><div class="feature-icon" aria-hidden="true">📝</div><h3>2. Preencha seus dados</h3><p>Se desejar, preencha o formulário de demonstração para preparar uma solicitação.</p></article>
-          <article class="feature"><div class="feature-icon" aria-hidden="true">🔎</div><h3>3. Confira as condições</h3><p>Antes de contratar, confirme taxas, CET, prazos e condições com a instituição financeira responsável.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">🧮</div><h3>01 · Simule com liberdade</h3><p>Compare valores e prazos com uma estimativa ilustrativa antes de decidir como seguir.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">🛡️</div><h3>02 · Entenda cada etapa</h3><p>Saiba quais informações são solicitadas e revise tudo antes de compartilhar seus dados.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">🔎</div><h3>03 · Confira antes de contratar</h3><p>Confirme a identidade da instituição, o CET e as condições reais. Simulação não é aprovação.</p></article>
         </div>
       </div>
     </section>
