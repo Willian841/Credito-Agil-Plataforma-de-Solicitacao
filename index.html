@@ -168,16 +168,16 @@
         <div class="application-info">
           <span class="eyebrow">Próximo passo</span>
           <h2>Prepare sua solicitação</h2>
-          <p>Preencha os campos abaixo para testar a experiência do formulário. Nesta primeira versão, os dados não são enviados nem armazenados.</p>
+          <p>Preencha os campos e confira o resumo. Você poderá abrir o WhatsApp com uma mensagem pronta, revisar os dados e decidir se deseja enviá-la.</p>
           <div class="steps">
             <div class="step"><span class="step-num">1</span><div><strong>Confira os dados</strong><br><span style="color:var(--muted);font-size:.9rem">Use informações corretas e revise antes de continuar.</span></div></div>
             <div class="step"><span class="step-num">2</span><div><strong>Veja o resumo</strong><br><span style="color:var(--muted);font-size:.9rem">O site mostrará um resumo para você conferir.</span></div></div>
-            <div class="step"><span class="step-num">3</span><div><strong>Envio será configurado depois</strong><br><span style="color:var(--muted);font-size:.9rem">Precisaremos conectar um backend seguro para receber solicitações reais.</span></div></div>
+            <div class="step"><span class="step-num">3</span><div><strong>Você controla o envio</strong><br><span style="color:var(--muted);font-size:.9rem">A mensagem só será enviada se você confirmar o envio no WhatsApp.</span></div></div>
           </div>
         </div>
         <form class="form-card" id="applicationForm">
           <h3>Seus dados</h3>
-          <p>Campos de demonstração — nada será transmitido.</p>
+          <p>Os dados serão colocados em uma mensagem para você revisar antes de enviar pelo WhatsApp.</p>
           <div class="form-grid">
             <div class="field full"><label for="fullName">Nome completo</label><input id="fullName" name="fullName" autocomplete="name" required minlength="3" placeholder="Digite seu nome"></div>
             <div class="field"><label for="phone">Telefone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="(00) 00000-0000"></div>
@@ -185,10 +185,10 @@
             <div class="field"><label for="income">Renda mensal aproximada (R$)</label><input id="income" name="income" type="number" min="0" step="100" placeholder="Ex.: 2500"></div>
             <div class="field"><label for="purpose">Finalidade</label><select id="purpose" name="purpose"><option value="">Selecione (opcional)</option><option>Organização financeira</option><option>Reforma ou casa</option><option>Estudos</option><option>Despesas pessoais</option><option>Outro</option></select></div>
           </div>
-          <label class="consent"><input type="checkbox" id="consent" required><span>Entendo que esta versão é uma demonstração e que meus dados não serão enviados. Li o aviso de privacidade desta página.</span></label>
+          <label class="consent"><input type="checkbox" id="consent" required><span>Autorizo abrir o WhatsApp com os dados que preenchi para preparar minha solicitação. Vou revisar a mensagem e só a enviarei se concordar.</span></label>
           <button class="btn btn-primary" type="submit" style="width:100%">Conferir resumo da simulação →</button>
           <div id="formStatus" class="status" role="status" aria-live="polite"></div>
-          <div class="notice">Não informe senhas, dados bancários, número de cartão ou documentos nesta demonstração.</div>
+          <div class="notice">Ao continuar, o WhatsApp abrirá com a mensagem preenchida. Nada é enviado automaticamente. Não inclua senhas, dados bancários, número de cartão ou documentos.</div>
         </form>
       </div>
     </section>
@@ -199,7 +199,7 @@
         <div class="faq">
           <details><summary>A simulação garante que meu empréstimo será aprovado?</summary><p>Não. A simulação é ilustrativa e não representa uma oferta, aprovação ou garantia de crédito.</p></details>
           <details><summary>O valor da parcela é definitivo?</summary><p>Não. O valor mostrado usa uma taxa mensal ilustrativa de 3% apenas para demonstrar o cálculo. Uma proposta real deve informar taxa, CET, tributos, tarifas e demais condições aplicáveis.</p></details>
-          <details><summary>Meus dados são enviados quando preencho o formulário?</summary><p>Não nesta versão. O formulário funciona somente no navegador e mostra um resumo na tela. Um envio real exige configurar e testar um serviço de backend seguro e uma política de privacidade adequada.</p></details>
+          <details><summary>Meus dados são enviados quando preencho o formulário?</summary><p>O site não envia os dados automaticamente. Se você clicar em “Continuar pelo WhatsApp”, abrirá uma mensagem preenchida para o número de atendimento; você poderá revisar e só enviará ao tocar no botão de enviar do WhatsApp.</p></details>
           <details><summary>O Crédito Ágil é uma instituição financeira?</summary><p>Esta página é um protótipo de interface. Antes de oferecer crédito real, será necessário identificar claramente a empresa responsável, verificar as exigências legais aplicáveis e integrar uma instituição ou serviço autorizado quando necessário.</p></details>
         </div>
       </div>
@@ -218,7 +218,7 @@
         <div><a class="brand" href="#"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a><p>Protótipo de site para simulação ilustrativa de parcelas. Ainda não oferece, aprova ou concede empréstimos.</p></div>
         <div><strong>Importante</strong><p>Confira todas as condições antes de contratar crédito. Não pague taxas antecipadas para liberar empréstimo sem verificar a legitimidade da instituição.</p></div>
       </div>
-      <div class="footer-bottom">© <span id="year"></span> Crédito Ágil. Protótipo inicial. | Aviso de privacidade: nenhum dado deste formulário é transmitido nesta versão.</div>
+      <div class="footer-bottom">© <span id="year"></span> Crédito Ágil. | Os dados só serão compartilhados se você confirmar o envio da mensagem no WhatsApp.</div>
     </div>
   </footer>
   <script>
@@ -258,8 +258,40 @@
       const months = Number(term.value);
       const rate = 0.03;
       const payment = principal * rate / (1 - Math.pow(1 + rate, -months));
+      const total = payment * months;
+      const optionalIncome = data.get('income') ? money(Number(data.get('income'))) : 'Não informado';
+      const optionalPurpose = data.get('purpose') || 'Não informada';
+      const message = [
+        'Olá! Gostaria de consultar uma solicitação pelo Crédito Ágil.',
+        '',
+        'Nome: ' + data.get('fullName'),
+        'Telefone: ' + data.get('phone'),
+        'E-mail: ' + data.get('email'),
+        'Renda mensal aproximada: ' + optionalIncome,
+        'Finalidade: ' + optionalPurpose,
+        '',
+        'Valor simulado: ' + money(principal),
+        'Prazo: ' + months + ' parcelas',
+        'Parcela estimada: ' + money(payment),
+        'Total estimado: ' + money(total),
+        '',
+        'Entendo que a simulação é ilustrativa e não garante aprovação ou oferta de crédito.'
+      ].join('\n');
+      const whatsappUrl = 'https://wa.me/5577988535882?text=' + encodeURIComponent(message);
       status.className = 'status show success';
-      status.textContent = 'Resumo de demonstração para ' + data.get('fullName') + ': valor simulado de ' + money(principal) + ' em ' + months + ' parcelas estimadas de ' + money(payment) + '. Nenhum dado foi enviado ou salvo. Para receber uma solicitação real, ainda precisamos configurar o backend seguro.';
+      status.replaceChildren();
+      const summary = document.createElement('p');
+      summary.textContent = 'Resumo para ' + data.get('fullName') + ': ' + money(principal) + ' em ' + months + ' parcelas estimadas de ' + money(payment) + ' (total estimado: ' + money(total) + ').';
+      const explanation = document.createElement('p');
+      explanation.textContent = 'Confira os dados antes de continuar. O WhatsApp abrirá com a mensagem preenchida; ela só será enviada se você confirmar o envio no próprio WhatsApp.';
+      const link = document.createElement('a');
+      link.className = 'btn btn-primary';
+      link.href = whatsappUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Continuar pelo WhatsApp →';
+      link.style.marginTop = '8px';
+      status.append(summary, explanation, link);
       status.scrollIntoView({behavior:'smooth',block:'nearest'});
     });
     updateSimulation();
