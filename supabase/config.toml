@@ -1,0 +1,4 @@
+project_id = "vofdcnjnedxnqbnpeoon"
+
+[functions.notify-whatsapp-status]
+verify_jwt = true
