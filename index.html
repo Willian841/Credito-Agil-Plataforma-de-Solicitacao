@@ -305,18 +305,17 @@
       const submitButton = event.currentTarget.querySelector('button[type="submit"]');
       submitButton.disabled = true;
       submitButton.textContent = 'Salvando solicitação…';
-      const { error: saveError } = await supabaseClient.from('loan_applications').insert({
-        full_name: String(data.get('fullName')).trim(),
-        phone: String(data.get('phone')).trim(),
-        email: String(data.get('email')).trim(),
-        cpf: String(data.get('cpf')).replace(/\D/g, ''),
-        loan_amount: principal,
-        loan_term: months,
-        monthly_payment: Number(payment.toFixed(2)),
-        total_payment: Number(total.toFixed(2)),
-        income: data.get('income') ? Number(data.get('income')) : null,
-        purpose: optionalPurpose === 'Não informada' ? null : optionalPurpose,
-        consent_at: new Date().toISOString()
+      const { data: submission, error: saveError } = await supabaseClient.rpc('submit_loan_application', {
+        p_full_name: String(data.get('fullName')).trim(),
+        p_phone: String(data.get('phone')).trim(),
+        p_email: String(data.get('email')).trim(),
+        p_cpf: String(data.get('cpf')).replace(/\D/g, ''),
+        p_loan_amount: principal,
+        p_loan_term: months,
+        p_monthly_payment: Number(payment.toFixed(2)),
+        p_total_payment: Number(total.toFixed(2)),
+        p_income: data.get('income') ? Number(data.get('income')) : null,
+        p_purpose: optionalPurpose === 'Não informada' ? null : optionalPurpose
       });
       submitButton.disabled = false;
       submitButton.textContent = 'Conferir resumo da simulação →';
@@ -326,8 +325,18 @@
         status.scrollIntoView({behavior:'smooth',block:'nearest'});
         return;
       }
+      const trackingCode = submission && submission.tracking_code;
+      if (!trackingCode) {
+        status.className = 'status show error';
+        status.textContent = 'Solicitação salva, mas não foi possível gerar o código de acompanhamento. Entre em contato com o atendimento antes de continuar.';
+        status.scrollIntoView({behavior:'smooth',block:'nearest'});
+        return;
+      }
+      const trackingUrl = new URL('acompanhar.html', window.location.href).href;
       const message = [
         'Olá! Gostaria de consultar uma solicitação pelo Crédito Ágil.',
+        'Código de acompanhamento: ' + trackingCode,
+        'Acompanhe em: ' + trackingUrl,
         '',
         'Nome: ' + data.get('fullName'),
         'Telefone: ' + data.get('phone'),
@@ -356,7 +365,22 @@
       link.rel = 'noopener noreferrer';
       link.textContent = 'Continuar pelo WhatsApp →';
       link.style.marginTop = '8px';
-      status.append(summary, explanation, link);
+      const trackingBox = document.createElement('div');
+      trackingBox.style.cssText = 'margin:14px 0;padding:16px;border:1px solid #b9d4f8;border-radius:12px;background:#f0f6ff';
+      const trackingTitle = document.createElement('strong');
+      trackingTitle.textContent = 'Guarde seu código de acompanhamento';
+      trackingTitle.style.display = 'block';
+      const trackingValue = document.createElement('code');
+      trackingValue.textContent = trackingCode;
+      trackingValue.style.cssText = 'display:block;font-size:1.2rem;font-weight:800;letter-spacing:1px;overflow-wrap:anywhere;margin:8px 0';
+      const trackingHelp = document.createElement('p');
+      trackingHelp.textContent = 'Use este código em “Acompanhar solicitação”. Se seu pedido for aprovado, você poderá informar os dados de recebimento. Guarde o código em local seguro.';
+      const trackingLink = document.createElement('a');
+      trackingLink.href = trackingUrl;
+      trackingLink.textContent = 'Acompanhar solicitação →';
+      trackingLink.className = 'btn btn-outline';
+      trackingBox.append(trackingTitle, trackingValue, trackingHelp, trackingLink);
+      status.append(summary, trackingBox, explanation, link);
       status.scrollIntoView({behavior:'smooth',block:'nearest'});
     });
     updateSimulation();
