@@ -6,7 +6,7 @@
 <title>Administração | Crédito Ágil</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#18324b;background:#f3f7fc;--blue:#0b5ed7;--line:#dce6f1}
-*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:36px auto;padding:0 18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 34px #18324b0d;margin-bottom:18px}h1,h2{margin-top:0;color:#102a43}p{color:#5b7187}.brand{font-weight:850;color:var(--blue);font-size:1.1rem}.field{display:grid;gap:7px;margin:14px 0}label{font-weight:700}input{font:inherit;padding:12px;border:1px solid #bdcddd;border-radius:9px;width:100%}button{font:inherit;font-weight:750;background:var(--blue);color:white;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}button.secondary{background:#eaf2fc;color:#174b87}button:disabled{opacity:.6;cursor:wait}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.status{padding:12px;border-radius:9px;background:#edf4fd;color:#254e7d;margin-top:12px}.hidden{display:none!important}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:top}th{background:#f7faff;color:#37536d}.muted{font-size:.85rem;color:#627d98}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5f1ff;color:#0752b5;font-size:.8rem;font-weight:700}.status-select{font:inherit;padding:8px;border:1px solid #bdcddd;border-radius:8px;min-width:135px;background:#fff;color:#18324b}.save-status{padding:8px 10px;font-size:.82rem}.status-cell{min-width:190px}.detail-btn{background:#eaf2fc;color:#174b87;padding:8px 10px;font-size:.82rem}.detail-overlay{position:fixed;inset:0;background:#102a4388;display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000}.detail-card{background:#fff;border-radius:18px;padding:24px;width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 70px #102a4350}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detail-item{padding:12px;background:#f5f8fc;border-radius:10px;min-width:0}.detail-item span{display:block;font-size:.8rem;color:#627d98;margin-bottom:5px}.detail-item strong{display:block;overflow-wrap:anywhere;white-space:pre-wrap;font-weight:650}.detail-actions{display:flex;justify-content:flex-end;margin-top:18px}@media(max-width:600px){.detail-grid{grid-template-columns:1fr}}@media(max-width:600px){.panel{padding:17px}main{margin-top:20px}}
+*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:36px auto;padding:0 18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 34px #18324b0d;margin-bottom:18px}h1,h2{margin-top:0;color:#102a43}p{color:#5b7187}.brand{font-weight:850;color:var(--blue);font-size:1.1rem}.field{display:grid;gap:7px;margin:14px 0}label{font-weight:700}input{font:inherit;padding:12px;border:1px solid #bdcddd;border-radius:9px;width:100%}button{font:inherit;font-weight:750;background:var(--blue);color:white;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}button.secondary{background:#eaf2fc;color:#174b87}button:disabled{opacity:.6;cursor:wait}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.status{padding:12px;border-radius:9px;background:#edf4fd;color:#254e7d;margin-top:12px}.hidden{display:none!important}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:top}th{background:#f7faff;color:#37536d}.muted{font-size:.85rem;color:#627d98}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5f1ff;color:#0752b5;font-size:.8rem;font-weight:700}.status-select{font:inherit;padding:8px;border:1px solid #bdcddd;border-radius:8px;min-width:135px;background:#fff;color:#18324b}.save-status{padding:8px 10px;font-size:.82rem}.status-cell{min-width:190px}.detail-btn{background:#eaf2fc;color:#174b87;padding:8px 10px;font-size:.82rem}.detail-overlay{position:fixed;inset:0;background:#102a4388;display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000}.detail-card{background:#fff;border-radius:18px;padding:24px;width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 70px #102a4350}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detail-item{padding:12px;background:#f5f8fc;border-radius:10px;min-width:0}.detail-item span{display:block;font-size:.8rem;color:#627d98;margin-bottom:5px}.detail-item strong{display:block;overflow-wrap:anywhere;white-space:pre-wrap;font-weight:650}.detail-actions{display:flex;justify-content:flex-end;margin-top:18px}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.stat-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:#f8fbff}.stat-card span{display:block;color:#627d98;font-size:.85rem;margin-bottom:8px}.stat-card strong{font-size:1.7rem;color:#102a43}.stat-card.pending{border-left:4px solid #e0a326}.stat-card.approved{border-left:4px solid #249764}.stat-card.rejected{border-left:4px solid #d94a4a}.filters{display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,220px);gap:12px;margin:16px 0}.filters input,.filters select{font:inherit;padding:11px;border:1px solid #bdcddd;border-radius:9px;background:#fff;color:#18324b;width:100%}.empty-filter{padding:18px;text-align:center;color:#627d98}@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.filters{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}@media(max-width:600px){.panel{padding:17px}main{margin-top:20px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -25,7 +25,7 @@
 </section>
 <section id="dashboard" class="panel hidden">
 <div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><button id="refreshButton" class="secondary">Atualizar lista</button></div>
-<div class="table-wrap"><table><thead><tr><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="7">Nenhuma consulta carregada.</td></tr></tbody></table></div>
+<div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select></div><div class="table-wrap"><table><thead><tr><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="7">Nenhuma consulta carregada.</td></tr></tbody></table></div>
 </section>
 <section id="detailOverlay" class="detail-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><div class="row" style="justify-content:space-between"><h2 id="detailTitle">Detalhes da solicitação</h2><button type="button" id="closeDetails" class="secondary">Fechar</button></div><p class="muted" id="detailReceived"></p><div id="detailGrid" class="detail-grid"></div><div class="detail-actions"><button type="button" id="closeDetailsBottom" class="secondary">Voltar à lista</button></div></div></section>
 <p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
@@ -66,21 +66,38 @@
     setStatus('Você saiu do painel.');
   });
   document.getElementById('refreshButton').addEventListener('click', loadApplications);
+  document.getElementById('searchApplications').addEventListener('input', renderApplications);
+  document.getElementById('filterStatus').addEventListener('change', renderApplications);
   document.getElementById('closeDetails').addEventListener('click', closeDetails);
   document.getElementById('closeDetailsBottom').addEventListener('click', closeDetails);
   document.getElementById('detailOverlay').addEventListener('click', (event) => { if (event.target.id === 'detailOverlay') closeDetails(); });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDetails(); });
   function closeDetails() { document.getElementById('detailOverlay').classList.add('hidden'); }
-  async function loadApplications() {
-    if (!supabaseClient) return;
+  let allApplications = [];
+  function updateStats(items) {
+    document.getElementById('statTotal').textContent = items.length;
+    document.getElementById('statPending').textContent = items.filter(item => (item.status || 'Pendente') === 'Pendente').length;
+    document.getElementById('statApproved').textContent = items.filter(item => item.status === 'Aprovado').length;
+    document.getElementById('statRejected').textContent = items.filter(item => item.status === 'Recusado').length;
+  }
+  function renderApplications() {
     const body = document.getElementById('applicationsBody');
+    const term = document.getElementById('searchApplications').value.trim().toLocaleLowerCase('pt-BR');
+    const chosenStatus = document.getElementById('filterStatus').value;
+    const filtered = allApplications.filter(item => {
+      const status = item.status || 'Pendente';
+      const matchesStatus = chosenStatus === 'Todos' || status === chosenStatus;
+      const searchable = [item.full_name, item.cpf, item.phone, item.email].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
+      return matchesStatus && searchable.includes(term);
+    });
     body.replaceChildren();
-    const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="7">Carregando solicitações…</td>'; body.append(loading);
-    const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose,status').order('created_at', { ascending: false }).limit(200);
-    body.replaceChildren();
-    if (error) { const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Não foi possível carregar. Confirme a migração de status, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); return; }
-    if (!data.length) { const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Ainda não há solicitações salvas.</td>'; body.append(row); setStatus('Nenhuma solicitação encontrada.'); return; }
-    for (const item of data) {
+    if (!filtered.length) {
+      const row = document.createElement('tr'); const cell = document.createElement('td');
+      cell.colSpan = 7; cell.className = 'empty-filter';
+      cell.textContent = allApplications.length ? 'Nenhuma solicitação corresponde à busca ou ao filtro.' : 'Ainda não há solicitações salvas.';
+      row.append(cell); body.append(row); return;
+    }
+    for (const item of filtered) {
       const row = document.createElement('tr');
       const cells = [
         new Date(item.created_at).toLocaleString('pt-BR'),
@@ -91,47 +108,38 @@
         (item.income ? Number(item.income).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'Renda não informada') + '\n' + (item.purpose || 'Finalidade não informada')
       ];
       for (const value of cells) { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); }
-      const statusCell = document.createElement('td');
-      statusCell.className = 'status-cell';
-      const statusSelect = document.createElement('select');
-      statusSelect.className = 'status-select';
+      const statusCell = document.createElement('td'); statusCell.className = 'status-cell';
+      const statusSelect = document.createElement('select'); statusSelect.className = 'status-select';
       statusSelect.setAttribute('aria-label', 'Status da solicitação de ' + (item.full_name || 'cliente'));
       for (const optionValue of ['Pendente', 'Aprovado', 'Recusado']) {
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.textContent = optionValue;
-        statusSelect.append(option);
+        const option = document.createElement('option'); option.value = optionValue; option.textContent = optionValue; statusSelect.append(option);
       }
       statusSelect.value = ['Pendente', 'Aprovado', 'Recusado'].includes(item.status) ? item.status : 'Pendente';
-      const saveButton = document.createElement('button');
-      saveButton.type = 'button';
-      saveButton.className = 'save-status';
-      saveButton.textContent = 'Salvar';
+      const saveButton = document.createElement('button'); saveButton.type = 'button'; saveButton.className = 'save-status'; saveButton.textContent = 'Salvar';
       saveButton.addEventListener('click', async () => {
         saveButton.disabled = true;
-        const chosenStatus = statusSelect.value;
-        const { error: updateError } = await supabaseClient
-          .from('loan_applications')
-          .update({ status: chosenStatus })
-          .eq('id', item.id);
+        const chosen = statusSelect.value;
+        const { error: updateError } = await supabaseClient.from('loan_applications').update({ status: chosen }).eq('id', item.id);
         saveButton.disabled = false;
-        if (updateError) {
-          setStatus('Não foi possível salvar o status. Execute o arquivo supabase-status-migration.sql no SQL Editor e tente novamente.');
-          return;
-        }
-        item.status = chosenStatus;
-        setStatus('Status atualizado para "' + chosenStatus + '" para a solicitação de ' + (item.full_name || 'cliente') + '.');
+        if (updateError) { setStatus('Não foi possível salvar o status. Verifique as permissões no Supabase.'); return; }
+        item.status = chosen; updateStats(allApplications); renderApplications();
+        setStatus('Status atualizado para "' + chosen + '" para a solicitação de ' + (item.full_name || 'cliente') + '.');
       });
-      const detailButton = document.createElement('button');
-      detailButton.type = 'button';
-      detailButton.className = 'detail-btn';
-      detailButton.textContent = 'Ver detalhes';
+      const detailButton = document.createElement('button'); detailButton.type = 'button'; detailButton.className = 'detail-btn'; detailButton.textContent = 'Ver detalhes';
       detailButton.addEventListener('click', () => showDetails(item));
       statusCell.append(statusSelect, document.createTextNode(' '), saveButton, document.createElement('br'), detailButton);
-      row.append(statusCell);
-      body.append(row);
+      row.append(statusCell); body.append(row);
     }
-    setStatus(data.length + ' solicitação(ões) carregada(s).');
+  }
+  async function loadApplications() {
+    if (!supabaseClient) return;
+    const body = document.getElementById('applicationsBody');
+    body.replaceChildren();
+    const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="7">Carregando solicitações…</td>'; body.append(loading);
+    const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose,status').order('created_at', { ascending: false }).limit(200);
+    if (error) { allApplications = []; updateStats(allApplications); body.replaceChildren(); const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Não foi possível carregar. Confirme a migração de status, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); return; }
+    allApplications = data || []; updateStats(allApplications); renderApplications();
+    setStatus(allApplications.length + ' solicitação(ões) carregada(s).');
   }
   function showDetails(item) {
     const money = (value) => value === null || value === undefined || value === '' ? 'Não informado' : Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
