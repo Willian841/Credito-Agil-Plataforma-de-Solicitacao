@@ -143,11 +143,28 @@
       saveButton.addEventListener('click', async () => {
         saveButton.disabled = true;
         const chosen = statusSelect.value;
+        const previousStatus = item.status || 'Pendente';
         const { error: updateError } = await supabaseClient.from('loan_applications').update({ status: chosen }).eq('id', item.id);
         saveButton.disabled = false;
         if (updateError) { setStatus('Não foi possível salvar o status. Verifique as permissões no Supabase.'); return; }
         item.status = chosen; updateStats(allApplications); renderApplications();
-        setStatus('Status atualizado para "' + chosen + '" para a solicitação de ' + (item.full_name || 'cliente') + '.');
+        if (previousStatus === chosen) {
+          setStatus('O status já estava como "' + chosen + '". Nenhuma nova notificação foi solicitada.');
+          return;
+        }
+        setStatus('Status salvo. Tentando enviar a notificação automática pelo WhatsApp…');
+        const { data: whatsappResult, error: whatsappError } = await supabaseClient.functions.invoke('notify-whatsapp-status', {
+          body: { application_id: item.id, status: chosen }
+        });
+        if (whatsappError) {
+          setStatus('Status atualizado para "' + chosen + '", mas o WhatsApp não confirmou o envio. Configure a função e as credenciais da Meta no Supabase.');
+        } else if (whatsappResult && whatsappResult.sent) {
+          setStatus('Status atualizado para "' + chosen + '" e mensagem aceita pela API do WhatsApp para ' + (item.full_name || 'cliente') + '. A entrega final depende do WhatsApp.');
+        } else if (whatsappResult && whatsappResult.skipped) {
+          setStatus('Status atualizado para "' + chosen + '". Nenhuma mensagem foi enviada porque o cliente não autorizou notificações por WhatsApp.');
+        } else {
+          setStatus('Status atualizado para "' + chosen + '", mas a mensagem não foi enviada. ' + (whatsappResult && whatsappResult.error ? whatsappResult.error : 'Confira a configuração do WhatsApp no Supabase.'));
+        }
       });
       const detailButton = document.createElement('button'); detailButton.type = 'button'; detailButton.className = 'detail-btn'; detailButton.textContent = 'Ver detalhes';
       detailButton.addEventListener('click', () => showDetails(item));
@@ -171,7 +188,7 @@
       body.replaceChildren();
       const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="7">Carregando solicitações…</td>'; body.append(loading);
     }
-    const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose,status').order('created_at', { ascending: false }).limit(200);
+    const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose,status,whatsapp_opt_in').order('created_at', { ascending: false }).limit(200);
     if (error) {
       if (!silent) { allApplications = []; updateStats(allApplications); body.replaceChildren(); const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Não foi possível carregar. Confirme a migração de status, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); }
       return;
@@ -209,6 +226,7 @@
       ['Renda mensal', money(item.income)],
       ['Finalidade do empréstimo', item.purpose],
       ['Status atual', item.status || 'Pendente'],
+      ['Autorizou notificações por WhatsApp', item.whatsapp_opt_in ? 'Sim' : 'Não'],
       ['ID da solicitação', item.id],
       ['Forma de recebimento', item.payout_details ? (item.payout_details.payment_method === 'pix' ? 'Pix' : 'Conta bancária') : 'Ainda não informado'],
       ['Tipo da chave Pix', item.payout_details && item.payout_details.payment_method === 'pix' ? item.payout_details.pix_type : 'Não se aplica'],
