@@ -101,7 +101,7 @@ lookupForm.addEventListener('submit',async event=>{
  const approval=document.getElementById('approvalMessage');
  const payout=document.getElementById('payoutForm');
  if(data.status==='Aprovado'){
-  approval.textContent=data.has_payout_details?'Sua solicitação está aprovada. Você já enviou os dados de recebimento; pode atualizá-los abaixo se necessário.':'Sua solicitação está aprovada. Preencha os dados de recebimento abaixo. A equipe autorizada poderá consultá-los no painel.';
+  approval.textContent=(data.has_payout_details?'Sua solicitação está aprovada. Você já enviou os dados de recebimento; pode atualizá-los abaixo se necessário.':'Sua solicitação está aprovada. Preencha os dados de recebimento abaixo. A equipe autorizada poderá consultá-los no painel.')+' Prazo estimado informado para crédito em conta: até 12 horas após a confirmação final da operação. Importante: a aprovação exibida nesta página não confirma que a transferência foi realizada nem garante o depósito; confirme o andamento com o atendimento.';
   document.getElementById('approvedSupport').classList.remove('hidden');
   const supportMessage='Olá! Minha solicitação no Crédito Ágil foi aprovada. Código de acompanhamento: '+activeCode+'. Valor solicitado: '+Number(data.loan_amount).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'. Gostaria de confirmar as condições contratuais, eventuais custos e os dados para recebimento. Não farei pagamento antecipado sem verificar a legitimidade e o contrato.';
   document.getElementById('whatsappSupport').href='https://wa.me/5577988535882?text='+encodeURIComponent(supportMessage);
