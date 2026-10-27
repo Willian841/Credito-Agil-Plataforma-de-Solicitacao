@@ -309,7 +309,7 @@
         full_name: String(data.get('fullName')).trim(),
         phone: String(data.get('phone')).trim(),
         email: String(data.get('email')).trim(),
-        cpf: String(data.get('cpf')).replace(/\\D/g, ''),
+        cpf: String(data.get('cpf')).replace(/\D/g, ''),
         loan_amount: principal,
         loan_term: months,
         monthly_payment: Number(payment.toFixed(2)),
