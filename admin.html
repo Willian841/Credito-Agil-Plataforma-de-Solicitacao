@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administração | Crédito Ágil</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#18324b;background:#f3f7fc;--blue:#0b5ed7;--line:#dce6f1}
+*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:36px auto;padding:0 18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 34px #18324b0d;margin-bottom:18px}h1,h2{margin-top:0;color:#102a43}p{color:#5b7187}.brand{font-weight:850;color:var(--blue);font-size:1.1rem}.field{display:grid;gap:7px;margin:14px 0}label{font-weight:700}input{font:inherit;padding:12px;border:1px solid #bdcddd;border-radius:9px;width:100%}button{font:inherit;font-weight:750;background:var(--blue);color:white;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}button.secondary{background:#eaf2fc;color:#174b87}button:disabled{opacity:.6;cursor:wait}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.status{padding:12px;border-radius:9px;background:#edf4fd;color:#254e7d;margin-top:12px}.hidden{display:none!important}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:top}th{background:#f7faff;color:#37536d}.muted{font-size:.85rem;color:#627d98}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5f1ff;color:#0752b5;font-size:.8rem;font-weight:700}@media(max-width:600px){.panel{padding:17px}main{margin-top:20px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body><main>
+<div class="brand">C+ Crédito Ágil <span style="color:#627d98;font-weight:500">/ Administração</span></div>
+<section class="panel" style="margin-top:18px">
+<h1>Painel administrativo</h1>
+<p>Entre com a conta de administrador autorizada no Supabase para consultar solicitações. Esta página não cria uma conta automaticamente.</p>
+<div id="configWarning" class="status">Configuração pendente: adicione a URL do projeto Supabase e a chave publicável (anon) neste arquivo. Nunca coloque a chave service_role no navegador.</div>
+<form id="loginForm">
+<div class="field"><label for="email">E-mail do administrador</label><input id="email" type="email" autocomplete="username" required></div>
+<div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required></div>
+<div class="row"><button type="submit" id="loginButton">Entrar</button><button type="button" id="logoutButton" class="secondary hidden">Sair</button></div>
+</form>
+<div id="status" class="status" role="status" aria-live="polite">Configure as credenciais do Supabase e execute o arquivo supabase-setup.sql antes de usar.</div>
+</section>
+<section id="dashboard" class="panel hidden">
+<div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><button id="refreshButton" class="secondary">Atualizar lista</button></div>
+<div class="table-wrap"><table><thead><tr><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="6">Nenhuma consulta carregada.</td></tr></tbody></table></div>
+</section>
+<p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
+</main>
+<script>
+  // Preencha apenas com a URL do projeto e a chave publicável/anon do Supabase.
+  // Nunca use a chave service_role em páginas públicas.
+  const SUPABASE_URL = 'COLE_A_URL_DO_PROJETO_SUPABASE';
+  const SUPABASE_ANON_KEY = 'COLE_A_CHAVE_PUBLICAVEL_DO_SUPABASE';
+  const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('COLE_A_') && !SUPABASE_ANON_KEY.includes('COLE_A_');
+  const statusEl = document.getElementById('status');
+  let supabaseClient = null;
+  const setStatus = (message) => { statusEl.textContent = message; };
+  if (configured && window.supabase) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    document.getElementById('configWarning').classList.add('hidden');
+    setStatus('Supabase configurado. Entre com a conta de administrador.');
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      const loggedIn = !!session;
+      document.getElementById('dashboard').classList.toggle('hidden', !loggedIn);
+      document.getElementById('logoutButton').classList.toggle('hidden', !loggedIn);
+      document.getElementById('loginButton').classList.toggle('hidden', loggedIn);
+      document.getElementById('loginForm').querySelectorAll('input').forEach(input => input.disabled = loggedIn);
+      if (loggedIn) loadApplications();
+    });
+  }
+  document.getElementById('loginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!supabaseClient) { setStatus('Falta configurar SUPABASE_URL e SUPABASE_ANON_KEY neste arquivo.'); return; }
+    const button = document.getElementById('loginButton'); button.disabled = true;
+    const { error } = await supabaseClient.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
+    button.disabled = false;
+    if (error) setStatus('Não foi possível entrar. Confira o e-mail/senha e se o usuário foi criado no Supabase Auth.');
+    else setStatus('Login realizado.');
+  });
+  document.getElementById('logoutButton').addEventListener('click', async () => {
+    if (supabaseClient) await supabaseClient.auth.signOut();
+    setStatus('Você saiu do painel.');
+  });
+  document.getElementById('refreshButton').addEventListener('click', loadApplications);
+  async function loadApplications() {
+    if (!supabaseClient) return;
+    const body = document.getElementById('applicationsBody');
+    body.replaceChildren();
+    const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="6">Carregando solicitações…</td>'; body.append(loading);
+    const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose').order('created_at', { ascending: false }).limit(200);
+    body.replaceChildren();
+    if (error) { const row = document.createElement('tr'); row.innerHTML = '<td colspan="6">Não foi possível carregar. Confirme o SQL, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); return; }
+    if (!data.length) { const row = document.createElement('tr'); row.innerHTML = '<td colspan="6">Ainda não há solicitações salvas.</td>'; body.append(row); setStatus('Nenhuma solicitação encontrada.'); return; }
+    for (const item of data) {
+      const row = document.createElement('tr');
+      const cells = [
+        new Date(item.created_at).toLocaleString('pt-BR'),
+        item.full_name || '—',
+        (item.phone || '—') + '\n' + (item.email || ''),
+        item.cpf || '—',
+        (Number(item.loan_amount) || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) + '\n' + item.loan_term + ' parcelas · ' + (Number(item.monthly_payment) || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) + '/mês',
+        (item.income ? Number(item.income).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'Renda não informada') + '\n' + (item.purpose || 'Finalidade não informada')
+      ];
+      for (const value of cells) { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); }
+      body.append(row);
+    }
+    setStatus(data.length + ' solicitação(ões) carregada(s).');
+  }
+</script>
+</body></html>
