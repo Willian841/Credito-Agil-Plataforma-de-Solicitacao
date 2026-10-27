@@ -53,11 +53,12 @@
       document.getElementById('loginButton').classList.toggle('hidden', loggedIn);
       document.getElementById('loginForm').querySelectorAll('input').forEach(input => input.disabled = loggedIn);
       if (loggedIn) {
-        if (pollTimer) clearInterval(pollTimer);
-        notificationsInitialized = false;
-        knownApplicationIds = new Set();
-        loadApplications();
-        pollTimer = setInterval(() => loadApplications(true), 30000);
+        if (!pollTimer) {
+          notificationsInitialized = false;
+          knownApplicationIds = new Set();
+          loadApplications();
+          pollTimer = setInterval(() => loadApplications(true), 30000);
+        }
       } else {
         if (pollTimer) clearInterval(pollTimer);
         pollTimer = null;
@@ -166,8 +167,10 @@
   async function loadApplications(silent = false) {
     if (!supabaseClient) return;
     const body = document.getElementById('applicationsBody');
-    body.replaceChildren();
-    const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="7">Carregando solicitações…</td>'; body.append(loading);
+    if (!silent) {
+      body.replaceChildren();
+      const loading = document.createElement('tr'); loading.innerHTML = '<td colspan="7">Carregando solicitações…</td>'; body.append(loading);
+    }
     const { data, error } = await supabaseClient.from('loan_applications').select('id,created_at,full_name,phone,email,cpf,loan_amount,loan_term,monthly_payment,total_payment,income,purpose,status').order('created_at', { ascending: false }).limit(200);
     if (error) {
       if (!silent) { allApplications = []; updateStats(allApplications); body.replaceChildren(); const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Não foi possível carregar. Confirme a migração de status, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); }
