@@ -36,7 +36,8 @@ Deno.serve(async (req: Request) => {
     global: { headers: { Authorization: authHeader } },
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const accessToken = authHeader.slice("Bearer ".length);\n  const { data: userData, error: userError } = await userClient.auth.getUser(accessToken);
+  const accessToken = authHeader.slice("Bearer ".length);
+  const { data: userData, error: userError } = await userClient.auth.getUser(accessToken);
   if (userError || !userData.user) return json(401, { error: "Sessão inválida." });
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey, {
