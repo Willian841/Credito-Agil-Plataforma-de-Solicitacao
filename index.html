@@ -186,7 +186,7 @@
             <div class="field"><label for="income">Renda mensal aproximada (R$)</label><input id="income" name="income" type="number" min="0" step="100" placeholder="Ex.: 2500"></div>
             <div class="field"><label for="purpose">Finalidade</label><select id="purpose" name="purpose"><option value="">Selecione (opcional)</option><option>Organização financeira</option><option>Reforma ou casa</option><option>Estudos</option><option>Despesas pessoais</option><option>Outro</option></select></div>
           </div>
-          <label class="consent"><input type="checkbox" id="consent" required><span>Entendo que esta versão ainda não consulta pendências financeiras. Autorizo abrir o WhatsApp com os dados da solicitação, exceto o CPF, que não será incluído na mensagem. Vou revisar tudo antes de enviar.</span></label>
+          <label class="consent"><input type="checkbox" id="consent" required><span>Autorizo o armazenamento dos dados informados no sistema Crédito Ágil para organizar e analisar esta solicitação, e entendo que posso abrir o WhatsApp para revisar uma mensagem sem meu CPF antes de enviá-la. Entendo que não há consulta de pendências nem garantia de aprovação.</span></label>
           <button class="btn btn-primary" type="submit" style="width:100%">Conferir resumo da simulação →</button>
           <div id="formStatus" class="status" role="status" aria-live="polite"></div>
           <div class="notice">O CPF não será enviado pelo WhatsApp nem armazenado por esta página. A validação verifica apenas se o número tem formato válido; não verifica dívidas, restrições ou score. Não inclua senhas nem dados bancários.</div>
@@ -222,7 +222,11 @@
       <div class="footer-bottom">© <span id="year"></span> Crédito Ágil. | Os dados só serão compartilhados se você confirmar o envio da mensagem no WhatsApp.</div>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = 'https://vofdcnjnedxnqbnpeoon.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_bMKQRogilwPwg-RBTboG_Q_G_13-y62';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
     const amount = document.getElementById('loanAmount');
     const term = document.getElementById('loanTerm');
     const amountDisplay = document.getElementById('amountDisplay');
@@ -280,7 +284,7 @@
       else if(digits.length) digits = '(' + digits;
       phone.value = digits;
     });
-    document.getElementById('applicationForm').addEventListener('submit', event => {
+    document.getElementById('applicationForm').addEventListener('submit', async event => {
       event.preventDefault();
       const status = document.getElementById('formStatus');
       if(!isValidCpf(cpfInput.value)){
@@ -298,6 +302,30 @@
       const total = payment * months;
       const optionalIncome = data.get('income') ? money(Number(data.get('income'))) : 'Não informado';
       const optionalPurpose = data.get('purpose') || 'Não informada';
+      const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Salvando solicitação…';
+      const { error: saveError } = await supabaseClient.from('loan_applications').insert({
+        full_name: String(data.get('fullName')).trim(),
+        phone: String(data.get('phone')).trim(),
+        email: String(data.get('email')).trim(),
+        cpf: String(data.get('cpf')).replace(/\\D/g, ''),
+        loan_amount: principal,
+        loan_term: months,
+        monthly_payment: Number(payment.toFixed(2)),
+        total_payment: Number(total.toFixed(2)),
+        income: data.get('income') ? Number(data.get('income')) : null,
+        purpose: optionalPurpose === 'Não informada' ? null : optionalPurpose,
+        consent_at: new Date().toISOString()
+      });
+      submitButton.disabled = false;
+      submitButton.textContent = 'Conferir resumo da simulação →';
+      if (saveError) {
+        status.className = 'status show error';
+        status.textContent = 'Não foi possível salvar sua solicitação. Nenhuma mensagem do WhatsApp foi preparada. Tente novamente mais tarde ou entre em contato com o atendimento.';
+        status.scrollIntoView({behavior:'smooth',block:'nearest'});
+        return;
+      }
       const message = [
         'Olá! Gostaria de consultar uma solicitação pelo Crédito Ágil.',
         '',
