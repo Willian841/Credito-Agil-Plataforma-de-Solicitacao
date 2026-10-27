@@ -80,7 +80,7 @@
     .status.show{display:block}
     .status.success{background:#e4f8ef;color:#086744}
     .status.error{background:#fff0ee;color:#a52b20}
-    .faq{max-width:800px;margin:0 auto;display:grid;gap:12px}
+    .tracking-band{background:#edf5ff;border:1px solid #cfe1f8;border-radius:20px;padding:26px;display:flex;justify-content:space-between;align-items:center;gap:20px}.tracking-band h2{color:var(--navy);margin:0 0 5px;font-size:1.45rem}.tracking-band p{color:var(--muted);margin:0}.floating-whatsapp{position:fixed;right:20px;bottom:20px;z-index:20;background:#16835b;color:#fff;border-radius:999px;padding:13px 18px;box-shadow:0 10px 28px #0b203633;text-decoration:none;font-weight:800;display:flex;align-items:center;gap:9px}.floating-whatsapp:hover{background:#106b49}.floating-whatsapp span{font-size:1.15rem}@media(max-width:600px){.tracking-band{align-items:flex-start;flex-direction:column;padding:21px}.floating-whatsapp{right:12px;bottom:12px;padding:12px 15px;font-size:.88rem}}\n    .faq{max-width:800px;margin:0 auto;display:grid;gap:12px}
     details{background:white;border:1px solid var(--line);border-radius:13px;padding:17px 19px}
     summary{cursor:pointer;font-weight:800;color:var(--navy)}
     details p{color:var(--muted);margin-bottom:0}
@@ -200,6 +200,15 @@
       </div>
     </section>
 
+    <section class="section section-white" id="acompanhar">
+      <div class="container">
+        <div class="tracking-band">
+          <div><h2>Já fez uma solicitação?</h2><p>Consulte o status usando seu código de acompanhamento. A consulta não garante aprovação nem depósito.</p></div>
+          <a class="btn btn-primary" href="./acompanhar.html">Acompanhar solicitação →</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section section-white" id="duvidas">
       <div class="container">
         <div class="section-head"><span class="eyebrow">Perguntas frequentes</span><h2>O que você precisa saber</h2><p>Transparência faz parte de uma boa decisão financeira.</p></div>
@@ -219,7 +228,7 @@
     </section>
   </main>
 
-  <footer>
+  <a class="floating-whatsapp" href="https://wa.me/5577988535882" target="_blank" rel="noopener noreferrer" aria-label="Falar com o atendimento pelo WhatsApp"><span aria-hidden="true">◉</span> Falar com atendimento</a>\n  <footer>
     <div class="container">
       <div class="footer-top">
         <div><a class="brand" href="#"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a><p>Protótipo de site para simulação ilustrativa de parcelas. Ainda não oferece, aprova ou concede empréstimos.</p></div>
