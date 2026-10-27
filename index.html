@@ -389,13 +389,40 @@
       const trackingValue = document.createElement('code');
       trackingValue.textContent = trackingCode;
       trackingValue.style.cssText = 'display:block;font-size:1.2rem;font-weight:800;letter-spacing:1px;overflow-wrap:anywhere;margin:8px 0';
+      const copyTrackingButton = document.createElement('button');
+      copyTrackingButton.type = 'button';
+      copyTrackingButton.className = 'btn btn-outline';
+      copyTrackingButton.textContent = 'Copiar código';
+      copyTrackingButton.style.margin = '0 0 10px';
+      copyTrackingButton.addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(trackingCode);
+          } else {
+            const temporaryInput = document.createElement('textarea');
+            temporaryInput.value = trackingCode;
+            temporaryInput.setAttribute('readonly', '');
+            temporaryInput.style.position = 'fixed';
+            temporaryInput.style.opacity = '0';
+            document.body.appendChild(temporaryInput);
+            temporaryInput.select();
+            const copied = document.execCommand('copy');
+            temporaryInput.remove();
+            if (!copied) throw new Error('copy failed');
+          }
+          copyTrackingButton.textContent = 'Código copiado!';
+        } catch (error) {
+          copyTrackingButton.textContent = 'Não foi possível copiar';
+        }
+        window.setTimeout(() => { copyTrackingButton.textContent = 'Copiar código'; }, 2200);
+      });
       const trackingHelp = document.createElement('p');
       trackingHelp.textContent = 'Use este código em “Acompanhar solicitação”. Se seu pedido for aprovado, você poderá informar os dados de recebimento. Guarde o código em local seguro.';
       const trackingLink = document.createElement('a');
       trackingLink.href = trackingUrl;
       trackingLink.textContent = 'Acompanhar solicitação →';
       trackingLink.className = 'btn btn-outline';
-      trackingBox.append(trackingTitle, trackingValue, trackingHelp, trackingLink);
+      trackingBox.append(trackingTitle, trackingValue, copyTrackingButton, trackingHelp, trackingLink);
       status.append(summary, trackingBox, explanation, link);
       status.scrollIntoView({behavior:'smooth',block:'nearest'});
     });
