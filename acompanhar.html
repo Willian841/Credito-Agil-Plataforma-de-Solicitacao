@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b5ed7"><title>Acompanhar solicitação | Crédito Ágil</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#243b53;background:#f4f8ff;--blue:#0b5ed7;--navy:#102a43;--line:#d9e5f2;--muted:#627d98}
+*{box-sizing:border-box}body{margin:0;line-height:1.55}.container{width:min(760px,calc(100% - 28px));margin:36px auto}.brand{font-weight:850;font-size:1.2rem;color:var(--navy);margin-bottom:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 18px 48px #102a4310;margin-bottom:18px}h1,h2{color:var(--navy);line-height:1.2}h1{font-size:clamp(1.8rem,5vw,2.5rem);margin-top:0}p{color:var(--muted)}.field{display:grid;gap:7px;margin:16px 0}label{font-weight:750;font-size:.92rem}input,select,button{font:inherit}input,select{width:100%;padding:12px 13px;border:1px solid #cbd9e8;border-radius:10px;background:#fff;color:var(--navy)}button,.btn{border:0;border-radius:11px;padding:12px 16px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}button:disabled{opacity:.6;cursor:wait}.status{display:none;padding:14px;border-radius:10px;margin-top:14px}.status.show{display:block}.success{background:#e4f8ef;color:#086744}.error{background:#fff0ee;color:#a52b20}.notice{background:#f0f6fd;border-radius:10px;padding:13px;font-size:.86rem;color:#526d86}.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.full{grid-column:1/-1}.pill{display:inline-block;border-radius:99px;background:#e5f1ff;color:#0752b5;padding:5px 10px;font-size:.82rem;font-weight:800}@media(max-width:540px){.container{margin:20px auto}.card{padding:19px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body><main class="container">
+<div class="brand">C+ Crédito Ágil</div>
+<section class="card">
+<h1>Acompanhar solicitação</h1>
+<p>Informe o código único que apareceu quando você enviou sua solicitação. Por segurança, quem tem o código consegue consultar apenas o status e, se aprovado, abrir a etapa de dados de recebimento.</p>
+<form id="lookupForm">
+<div class="field"><label for="trackingCode">Código de acompanhamento</label><input id="trackingCode" required minlength="32" maxlength="32" pattern="[A-Fa-f0-9]{32}" autocomplete="off" autocapitalize="characters" placeholder="Cole seu código de 32 caracteres"></div>
+<button type="submit" id="lookupButton">Consultar status</button>
+</form>
+<div id="lookupStatus" class="status" role="status" aria-live="polite"></div>
+</section>
+<section id="applicationCard" class="card hidden">
+<h2>Resultado da solicitação</h2>
+<p id="applicationSummary"></p>
+<div id="approvalMessage" class="notice"></div>
+<form id="payoutForm" class="hidden">
+<h2>Dados para recebimento</h2>
+<p>Esta etapa fica disponível apenas quando o status estiver aprovado. Escolha Pix ou conta bancária. Não informe senha, token, número de cartão ou CVV.</p>
+<div class="field"><label for="paymentMethod">Como deseja receber?</label><select id="paymentMethod" required><option value="pix">Pix</option><option value="bank">Conta bancária</option></select></div>
+<div id="pixFields">
+<div class="field"><label for="pixType">Tipo de chave Pix</label><select id="pixType"><option value="CPF">CPF</option><option value="CNPJ">CNPJ</option><option value="E-mail">E-mail</option><option value="Telefone">Telefone</option><option value="Chave aleatória">Chave aleatória</option></select></div>
+<div class="field"><label for="pixKey">Chave Pix</label><input id="pixKey" maxlength="160" autocomplete="off" placeholder="Digite a chave Pix"></div>
+</div>
+<div id="bankFields" class="hidden">
+<div class="grid">
+<div class="field"><label for="bankName">Nome do banco</label><input id="bankName" maxlength="120" autocomplete="off"></div>
+<div class="field"><label for="bankCode">Código do banco (opcional)</label><input id="bankCode" maxlength="20" autocomplete="off"></div>
+<div class="field"><label for="agency">Agência</label><input id="agency" maxlength="30" autocomplete="off"></div>
+<div class="field"><label for="accountNumber">Número da conta com dígito</label><input id="accountNumber" maxlength="40" autocomplete="off"></div>
+<div class="field"><label for="accountType">Tipo de conta</label><select id="accountType"><option value="Corrente">Corrente</option><option value="Poupança">Poupança</option><option value="Pagamento">Pagamento</option></select></div>
+<div class="field"><label for="accountHolder">Nome completo do titular</label><input id="accountHolder" maxlength="160" autocomplete="name"></div>
+</div>
+</div>
+<label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:.86rem;margin:18px 0"><input type="checkbox" id="payoutConsent" required style="width:auto;margin-top:5px"><span>Confirmo que os dados informados são meus ou que estou autorizado a fornecê-los para esta solicitação. Entendo que serão acessíveis à equipe autorizada para a finalidade de análise/recebimento.</span></label>
+<button type="submit" id="savePayoutButton">Salvar dados de recebimento</button>
+<div id="payoutStatus" class="status" role="status" aria-live="polite"></div>
+</form>
+</section>
+<p class="notice">Importante: este protótipo não libera nem transfere dinheiro automaticamente. A aprovação não garante pagamento. Nunca pague taxa antecipada para liberar empréstimo e não forneça dados de cartão para receber Pix ou transferência.</p>
+<a class="btn" href="./index.html">Voltar ao site</a>
+</main>
+<script>
+const SUPABASE_URL='https://vofdcnjnedxnqbnpeoon.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_bMKQRogilwPwg-RBTboG_Q_G_13-y62';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const lookupForm=document.getElementById('lookupForm');
+const lookupStatus=document.getElementById('lookupStatus');
+const payoutStatus=document.getElementById('payoutStatus');
+const codeInput=document.getElementById('trackingCode');
+let activeCode='';
+let activeApplication=null;
+function showStatus(el,message,type){el.className='status show '+type;el.textContent=message;}
+function syncMethodFields(){
+ const pix=document.getElementById('paymentMethod').value==='pix';
+ document.getElementById('pixFields').classList.toggle('hidden',!pix);
+ document.getElementById('bankFields').classList.toggle('hidden',pix);
+ document.getElementById('pixType').required=pix;
+ document.getElementById('pixKey').required=pix;
+ document.getElementById('bankName').required=!pix;
+ document.getElementById('agency').required=!pix;
+ document.getElementById('accountNumber').required=!pix;
+ document.getElementById('accountHolder').required=!pix;
+ document.getElementById('accountType').required=!pix;
+}
+document.getElementById('paymentMethod').addEventListener('change',syncMethodFields);
+syncMethodFields();
+lookupForm.addEventListener('submit',async event=>{
+ event.preventDefault();
+ activeCode=codeInput.value.trim().toUpperCase();
+ const button=document.getElementById('lookupButton');button.disabled=true;
+ showStatus(lookupStatus,'Consultando…','success');
+ document.getElementById('applicationCard').classList.add('hidden');
+ document.getElementById('payoutForm').classList.add('hidden');
+ const {data,error}=await supabaseClient.rpc('get_application_status',{p_code:activeCode});
+ button.disabled=false;
+ if(error){showStatus(lookupStatus,'Não foi possível consultar. Confirme se a migração de acompanhamento foi executada no Supabase.','error');return;}
+ if(!data){showStatus(lookupStatus,'Código não encontrado. Confira os 32 caracteres e tente novamente.','error');return;}
+ activeApplication=data;
+ document.getElementById('applicationCard').classList.remove('hidden');
+ document.getElementById('applicationSummary').textContent='Valor solicitado: '+Number(data.loan_amount).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'. Recebido em '+new Date(data.created_at).toLocaleString('pt-BR')+'.';
+ const approval=document.getElementById('approvalMessage');
+ const payout=document.getElementById('payoutForm');
+ if(data.status==='Aprovado'){
+  approval.textContent=data.has_payout_details?'Sua solicitação está aprovada. Você já enviou os dados de recebimento; pode atualizá-los abaixo se necessário.':'Sua solicitação está aprovada. Preencha os dados de recebimento abaixo. A equipe autorizada poderá consultá-los no painel.';
+  payout.classList.remove('hidden');
+ }else if(data.status==='Recusado'){
+  approval.textContent='Sua solicitação está com status recusado. A etapa de dados de recebimento não está disponível.';
+ }else{
+  approval.textContent='Sua solicitação está pendente de análise. A etapa de dados de recebimento será liberada somente se o status mudar para Aprovado.';
+ }
+ showStatus(lookupStatus,'Status da solicitação: '+data.status+'.','success');
+});
+codeInput.addEventListener('input',()=>{codeInput.value=codeInput.value.replace(/[^a-fA-F0-9]/g,'').slice(0,32).toUpperCase();});
+document.getElementById('payoutForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ if(!activeCode||!activeApplication||activeApplication.status!=='Aprovado')return;
+ const form=event.currentTarget;
+ if(!form.reportValidity())return;
+ const method=document.getElementById('paymentMethod').value;
+ const button=document.getElementById('savePayoutButton');button.disabled=true;
+ showStatus(payoutStatus,'Salvando com segurança…','success');
+ const args={
+  p_code:activeCode,
+  p_payment_method:method,
+  p_pix_type:method==='pix'?document.getElementById('pixType').value:null,
+  p_pix_key:method==='pix'?document.getElementById('pixKey').value.trim():null,
+  p_bank_name:method==='bank'?document.getElementById('bankName').value.trim():null,
+  p_bank_code:method==='bank'?document.getElementById('bankCode').value.trim():null,
+  p_agency:method==='bank'?document.getElementById('agency').value.trim():null,
+  p_account_number:method==='bank'?document.getElementById('accountNumber').value.trim():null,
+  p_account_type:method==='bank'?document.getElementById('accountType').value:null,
+  p_account_holder:method==='bank'?document.getElementById('accountHolder').value.trim():null
+ };
+ const {data,error}=await supabaseClient.rpc('save_payout_details',args);
+ button.disabled=false;
+ if(error||data!==true){showStatus(payoutStatus,'Não foi possível salvar. Confirme que a solicitação continua aprovada e tente novamente.','error');return;}
+ activeApplication.has_payout_details=true;
+ showStatus(payoutStatus,'Dados de recebimento salvos. A equipe autorizada poderá consultá-los no painel administrativo.','success');
+ form.reset();syncMethodFields();
+});
+</script></body></html>
