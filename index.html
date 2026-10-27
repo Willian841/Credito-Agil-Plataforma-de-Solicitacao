@@ -21,10 +21,20 @@
     .nav-links{display:flex;align-items:center;gap:26px}
     .nav-links a{text-decoration:none;color:#486581;font-size:.94rem;font-weight:650}
     .nav-links a:hover{color:var(--blue)}
-    .btn{border:0;border-radius:12px;padding:13px 19px;display:inline-flex;justify-content:center;align-items:center;gap:8px;font-weight:750;text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px #0b5ed72b}
-    .btn-primary:hover{background:#084db7}
+    .btn{border:0;border-radius:12px;padding:13px 19px;display:inline-flex;justify-content:center;align-items:center;gap:8px;font-weight:750;text-decoration:none;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px #0b20361a}
+    .btn:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7eb5ff;outline-offset:3px}
+    .btn-primary{background:linear-gradient(135deg,#0b65e5,#084db7);color:#fff;box-shadow:0 8px 18px #0b5ed72b}
+    .btn-primary:hover{background:linear-gradient(135deg,#0958c8,#073f98)}
+    header{position:sticky;top:0;z-index:15;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(217,229,242,.8)}
+    .nav{min-height:76px}
+    .hero{position:relative;isolation:isolate;overflow:hidden}
+    .hero:before{content:"";position:absolute;z-index:-1;width:420px;height:420px;right:-170px;bottom:-260px;border:1px solid #b9d4f866;border-radius:50%;box-shadow:0 0 0 38px #d4e7ff33,0 0 0 78px #d4e7ff20}
+    .hero-card{transition:transform .25s ease,box-shadow .25s ease}
+    .hero-card:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(16,42,67,.14)}
+    .feature{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .feature:hover{transform:translateY(-4px);border-color:#b9d4f8;box-shadow:0 16px 36px rgba(16,42,67,.08)}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
     .btn-outline{background:white;color:var(--blue);border:1px solid #b9d4f8}
     .hero{padding:76px 0 64px;background:radial-gradient(ellipse at 85% 10%,#d4e7ff 0,transparent 38%),linear-gradient(120deg,#f5f9ff,#fff 65%)}
     .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:56px}
@@ -104,6 +114,7 @@
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="#como-funciona">Como funciona</a>
         <a href="#duvidas">Dúvidas</a>
+        <a href="./acompanhar.html">Acompanhar</a>
         <a class="btn btn-primary" href="#simulador">Simular agora <span aria-hidden="true">→</span></a>
       </nav>
     </div>
