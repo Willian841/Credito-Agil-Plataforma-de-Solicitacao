@@ -176,7 +176,12 @@
       if (!silent) { allApplications = []; updateStats(allApplications); body.replaceChildren(); const row = document.createElement('tr'); row.innerHTML = '<td colspan="7">Não foi possível carregar. Confirme a migração de status, as políticas RLS e se sua conta está em admin_users.</td>'; body.append(row); setStatus('A consulta foi bloqueada ou falhou. Verifique as permissões no Supabase.'); }
       return;
     }
-    const freshData = data || [];
+    const { data: payoutRows, error: payoutError } = await supabaseClient.from('payout_details').select('application_id,payment_method,pix_type,pix_key,bank_name,bank_code,agency,account_number,account_type,account_holder,updated_at');
+    if (payoutError) {
+      if (!silent) setStatus('Solicitações carregadas, mas não foi possível consultar os dados de recebimento. Execute a migração de recebimento no Supabase.');
+    }
+    const payoutByApplication = new Map((payoutRows || []).map(row => [row.application_id, row]));
+    const freshData = (data || []).map(item => ({ ...item, payout_details: payoutByApplication.get(item.id) || null }));
     if (!notificationsInitialized) {
       knownApplicationIds = new Set(freshData.map(item => String(item.id)));
       notificationsInitialized = true;
@@ -204,7 +209,17 @@
       ['Renda mensal', money(item.income)],
       ['Finalidade do empréstimo', item.purpose],
       ['Status atual', item.status || 'Pendente'],
-      ['ID da solicitação', item.id]
+      ['ID da solicitação', item.id],
+      ['Forma de recebimento', item.payout_details ? (item.payout_details.payment_method === 'pix' ? 'Pix' : 'Conta bancária') : 'Ainda não informado'],
+      ['Tipo da chave Pix', item.payout_details && item.payout_details.payment_method === 'pix' ? item.payout_details.pix_type : 'Não se aplica'],
+      ['Chave Pix', item.payout_details && item.payout_details.payment_method === 'pix' ? item.payout_details.pix_key : 'Não informado'],
+      ['Banco', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.bank_name : 'Não informado'],
+      ['Código do banco', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.bank_code : 'Não informado'],
+      ['Agência', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.agency : 'Não informado'],
+      ['Conta', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.account_number : 'Não informado'],
+      ['Tipo de conta', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.account_type : 'Não informado'],
+      ['Titular da conta', item.payout_details && item.payout_details.payment_method === 'bank' ? item.payout_details.account_holder : 'Não informado'],
+      ['Dados de recebimento atualizados em', item.payout_details && item.payout_details.updated_at ? new Date(item.payout_details.updated_at).toLocaleString('pt-BR') : 'Não informado']
     ];
     const grid = document.getElementById('detailGrid');
     grid.replaceChildren();
