@@ -192,6 +192,7 @@
             <div class="field"><label for="purpose">Finalidade</label><select id="purpose" name="purpose"><option value="">Selecione (opcional)</option><option>Organização financeira</option><option>Reforma ou casa</option><option>Estudos</option><option>Despesas pessoais</option><option>Outro</option></select></div>
           </div>
           <label class="consent"><input type="checkbox" id="consent" required><span>Autorizo o armazenamento dos dados informados no sistema Crédito Ágil para organizar e analisar esta solicitação, e entendo que posso abrir o WhatsApp para revisar uma mensagem sem meu CPF antes de enviá-la. Entendo que não há consulta de pendências nem garantia de aprovação.</span></label>
+          <label class="consent"><input type="checkbox" id="whatsappOptIn" name="whatsappOptIn"><span>Autorizo receber mensagens automáticas pelo WhatsApp informado sobre mudanças no status desta solicitação. Posso não marcar esta opção ou retirar meu consentimento entrando em contato com o atendimento. A mensagem informa apenas o status cadastrado e não garante aprovação nem depósito.</span></label>
           <button class="btn btn-primary" type="submit" style="width:100%">Conferir resumo da simulação →</button>
           <div id="formStatus" class="status" role="status" aria-live="polite"></div>
           <div class="notice">O CPF não será enviado pelo WhatsApp nem armazenado por esta página. A validação verifica apenas se o número tem formato válido; não verifica dívidas, restrições ou score. Não inclua senhas nem dados bancários.</div>
@@ -320,7 +321,8 @@
         p_monthly_payment: Number(payment.toFixed(2)),
         p_total_payment: Number(total.toFixed(2)),
         p_income: data.get('income') ? Number(data.get('income')) : null,
-        p_purpose: optionalPurpose === 'Não informada' ? null : optionalPurpose
+        p_purpose: optionalPurpose === 'Não informada' ? null : optionalPurpose,
+        p_whatsapp_opt_in: document.getElementById('whatsappOptIn').checked
       });
       submitButton.disabled = false;
       submitButton.textContent = 'Conferir resumo da simulação →';
