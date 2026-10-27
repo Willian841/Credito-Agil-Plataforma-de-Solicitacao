@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b5ed7">
+  <meta name="description" content="Conheça o Crédito Ágil e faça uma simulação ilustrativa de parcelas de empréstimo.">
+  <title>Crédito Ágil | Simule com clareza</title>
+  <style>
+    :root{--blue:#0b5ed7;--blue-dark:#083b83;--navy:#102a43;--sky:#eaf3ff;--ink:#243b53;--muted:#627d98;--line:#d9e5f2;--white:#fff;--green:#16835b;--shadow:0 18px 48px rgba(16,42,67,.10)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f7faff;line-height:1.6}
+    a{color:inherit}
+    button,input,select{font:inherit}
+    .container{width:min(1120px,calc(100% - 40px));margin-inline:auto}
+    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+    .nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:850;font-size:1.15rem;color:var(--navy);letter-spacing:-.4px}
+    .brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#1688ff,#0648b8);color:white;font-size:1.25rem;box-shadow:0 7px 18px #0b5ed733}
+    .nav-links{display:flex;align-items:center;gap:26px}
+    .nav-links a{text-decoration:none;color:#486581;font-size:.94rem;font-weight:650}
+    .nav-links a:hover{color:var(--blue)}
+    .btn{border:0;border-radius:12px;padding:13px 19px;display:inline-flex;justify-content:center;align-items:center;gap:8px;font-weight:750;text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px #0b5ed72b}
+    .btn-primary:hover{background:#084db7}
+    .btn-outline{background:white;color:var(--blue);border:1px solid #b9d4f8}
+    .hero{padding:76px 0 64px;background:radial-gradient(ellipse at 85% 10%,#d4e7ff 0,transparent 38%),linear-gradient(120deg,#f5f9ff,#fff 65%)}
+    .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:56px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#e5f1ff;color:#0752b5;border-radius:999px;padding:7px 12px;font-size:.82rem;font-weight:800}
+    h1{font-size:clamp(2.5rem,5vw,4.25rem);line-height:1.08;letter-spacing:-2.2px;color:var(--navy);margin:20px 0}
+    h1 span{color:var(--blue)}
+    .hero-copy{max-width:590px;color:#526d86;font-size:1.12rem}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:27px}
+    .trust-row{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;color:#526d86;font-size:.88rem}
+    .trust-row span:before{content:"✓";color:var(--green);font-weight:900;margin-right:7px}
+    .hero-card{background:white;border:1px solid #dce9f7;border-radius:24px;padding:28px;box-shadow:var(--shadow);position:relative}
+    .card-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .card-top h2{margin:0;font-size:1.15rem;color:var(--navy)}
+    .pill{font-size:.75rem;font-weight:800;color:#087443;background:#e4f8ef;padding:6px 9px;border-radius:999px}
+    .amount-label{display:block;color:var(--muted);font-size:.9rem;margin-top:25px}
+    .amount-display{font-size:2.35rem;letter-spacing:-1.3px;color:var(--navy);font-weight:850;margin:2px 0 8px}
+    input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
+    .range-ends{display:flex;justify-content:space-between;color:#829ab1;font-size:.78rem}
+    .field{display:grid;gap:7px;margin-top:18px}
+    label{font-weight:750;font-size:.91rem;color:#334e68}
+    input:not([type=range]),select{width:100%;border:1px solid #cbd9e8;border-radius:10px;padding:12px 13px;background:#fff;color:var(--navy);outline:none}
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0b5ed71a}
+    .result{background:linear-gradient(135deg,#0b5ed7,#08439d);color:white;padding:18px;border-radius:16px;margin-top:22px}
+    .result small{opacity:.85}
+    .monthly{font-size:2rem;line-height:1.3;font-weight:850;letter-spacing:-.7px}
+    .result-foot{font-size:.78rem;opacity:.88;margin-top:7px}
+    .section{padding:76px 0}
+    .section-white{background:white}
+    .section-head{text-align:center;max-width:680px;margin:0 auto 38px}
+    .section-head h2{font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.2;letter-spacing:-1px;color:var(--navy);margin:12px 0}
+    .section-head p{color:var(--muted);margin:0}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .feature{padding:25px;border:1px solid var(--line);border-radius:18px;background:#fff}
+    .feature-icon{width:46px;height:46px;border-radius:14px;background:var(--sky);display:grid;place-items:center;font-size:1.35rem}
+    .feature h3{color:var(--navy);margin:17px 0 7px;font-size:1.08rem}
+    .feature p{margin:0;color:var(--muted);font-size:.94rem}
+    .application-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:42px;align-items:start}
+    .application-info h2{color:var(--navy);font-size:2.2rem;line-height:1.2;letter-spacing:-1px;margin:14px 0}
+    .application-info p{color:var(--muted)}
+    .steps{display:grid;gap:16px;margin-top:25px}
+    .step{display:flex;gap:12px;align-items:flex-start}
+    .step-num{flex:0 0 30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#e5f1ff;color:var(--blue);font-weight:850}
+    .form-card{background:white;border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+    .form-card h3{margin:0;color:var(--navy);font-size:1.35rem}
+    .form-card>p{margin:5px 0 20px;color:var(--muted);font-size:.9rem}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 15px}
+    .full{grid-column:1/-1}
+    .consent{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;color:var(--muted);margin:18px 0}
+    .consent input{margin-top:5px}
+    .notice{font-size:.8rem;color:#627d98;background:#f0f6fd;border-radius:10px;padding:12px;margin-top:14px}
+    .status{display:none;padding:14px;border-radius:10px;margin-top:15px;font-size:.9rem}
+    .status.show{display:block}
+    .status.success{background:#e4f8ef;color:#086744}
+    .status.error{background:#fff0ee;color:#a52b20}
+    .faq{max-width:800px;margin:0 auto;display:grid;gap:12px}
+    details{background:white;border:1px solid var(--line);border-radius:13px;padding:17px 19px}
+    summary{cursor:pointer;font-weight:800;color:var(--navy)}
+    details p{color:var(--muted);margin-bottom:0}
+    .cta{background:linear-gradient(120deg,#083b83,#0b5ed7);color:white;border-radius:24px;padding:40px;display:flex;justify-content:space-between;align-items:center;gap:24px}
+    .cta h2{font-size:clamp(1.7rem,3vw,2.35rem);line-height:1.15;margin:0 0 8px;letter-spacing:-.8px}
+    .cta p{margin:0;color:#dceaff}
+    .cta .btn{background:white;color:#084db7;white-space:nowrap}
+    footer{background:#0b2036;color:#d9e7f5;padding:38px 0 24px}
+    .footer-top{display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
+    footer .brand{color:white}
+    footer p{color:#a8bfd5;font-size:.85rem;max-width:600px}
+    .footer-bottom{border-top:1px solid #29415a;margin-top:25px;padding-top:17px;color:#a8bfd5;font-size:.78rem}
+    @media(max-width:800px){.hero-grid,.application-grid{grid-template-columns:1fr;gap:30px}.hero{padding:50px 0}.features{grid-template-columns:1fr}.nav-links a:not(.btn){display:none}.section{padding:58px 0}.application-info h2{font-size:1.9rem}.cta{align-items:flex-start;flex-direction:column;padding:28px}}
+    @media(max-width:500px){.container{width:min(100% - 28px,1120px)}.nav{min-height:66px}.brand{font-size:1rem}.brand-mark{width:36px;height:36px}.nav-links .btn{padding:10px 12px;font-size:.82rem}.hero-card,.form-card{padding:20px}.hero-actions .btn{width:100%}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.amount-display{font-size:2rem}.trust-row{gap:10px;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#" aria-label="Crédito Ágil, início"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#duvidas">Dúvidas</a>
+        <a class="btn btn-primary" href="#simulador">Simular agora <span aria-hidden="true">→</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">● Planeje com mais clareza</span>
+          <h1>Seus planos merecem um caminho <span>mais simples.</span></h1>
+          <p class="hero-copy">Faça uma simulação ilustrativa, veja uma estimativa de parcelas e conheça o processo antes de enviar uma solicitação.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#simulador">Fazer simulação <span aria-hidden="true">→</span></a>
+            <a class="btn btn-outline" href="#como-funciona">Saiba como funciona</a>
+          </div>
+          <div class="trust-row"><span>Simulação gratuita</span><span>Sem compromisso</span><span>Informações claras</span></div>
+        </div>
+        <div class="hero-card" id="simulador">
+          <div class="card-top"><h2>Simule seu empréstimo</h2><span class="pill">Grátis</span></div>
+          <label class="amount-label" for="loanAmount">Qual valor você precisa?</label>
+          <div class="amount-display" id="amountDisplay">R$ 2.000,00</div>
+          <input id="loanAmount" type="range" min="500" max="10000" step="100" value="2000" aria-label="Valor do empréstimo em reais">
+          <div class="range-ends"><span>R$ 500</span><span>R$ 10.000</span></div>
+          <div class="field">
+            <label for="loanTerm">Em quantas parcelas?</label>
+            <select id="loanTerm">
+              <option value="6">6 parcelas</option>
+              <option value="12" selected>12 parcelas</option>
+              <option value="18">18 parcelas</option>
+              <option value="24">24 parcelas</option>
+              <option value="36">36 parcelas</option>
+            </select>
+          </div>
+          <div class="result" aria-live="polite">
+            <small>Parcela estimada a partir de uma taxa ilustrativa de 3% ao mês</small>
+            <div class="monthly" id="monthlyPayment">R$ 200,92</div>
+            <div class="result-foot" id="totalPayment">Total estimado: R$ 2.411,04</div>
+          </div>
+          <p class="notice">Esta é apenas uma estimativa educativa. A taxa real, o CET, as condições e a aprovação dependem da instituição financeira responsável.</p>
+          <a href="#solicitacao" class="btn btn-primary" style="width:100%;margin-top:10px">Continuar para solicitação →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white" id="como-funciona">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Simples e transparente</span>
+          <h2>Um passo de cada vez</h2>
+          <p>Consulte uma estimativa e entenda o que acontece antes de qualquer contratação.</p>
+        </div>
+        <div class="features">
+          <article class="feature"><div class="feature-icon" aria-hidden="true">🧮</div><h3>1. Faça uma simulação</h3><p>Escolha um valor e um prazo para visualizar uma estimativa de parcelas mensais.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">📝</div><h3>2. Preencha seus dados</h3><p>Se desejar, preencha o formulário de demonstração para preparar uma solicitação.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">🔎</div><h3>3. Confira as condições</h3><p>Antes de contratar, confirme taxas, CET, prazos e condições com a instituição financeira responsável.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="solicitacao">
+      <div class="container application-grid">
+        <div class="application-info">
+          <span class="eyebrow">Próximo passo</span>
+          <h2>Prepare sua solicitação</h2>
+          <p>Preencha os campos abaixo para testar a experiência do formulário. Nesta primeira versão, os dados não são enviados nem armazenados.</p>
+          <div class="steps">
+            <div class="step"><span class="step-num">1</span><div><strong>Confira os dados</strong><br><span style="color:var(--muted);font-size:.9rem">Use informações corretas e revise antes de continuar.</span></div></div>
+            <div class="step"><span class="step-num">2</span><div><strong>Veja o resumo</strong><br><span style="color:var(--muted);font-size:.9rem">O site mostrará um resumo para você conferir.</span></div></div>
+            <div class="step"><span class="step-num">3</span><div><strong>Envio será configurado depois</strong><br><span style="color:var(--muted);font-size:.9rem">Precisaremos conectar um backend seguro para receber solicitações reais.</span></div></div>
+          </div>
+        </div>
+        <form class="form-card" id="applicationForm">
+          <h3>Seus dados</h3>
+          <p>Campos de demonstração — nada será transmitido.</p>
+          <div class="form-grid">
+            <div class="field full"><label for="fullName">Nome completo</label><input id="fullName" name="fullName" autocomplete="name" required minlength="3" placeholder="Digite seu nome"></div>
+            <div class="field"><label for="phone">Telefone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="(00) 00000-0000"></div>
+            <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="voce@exemplo.com"></div>
+            <div class="field"><label for="income">Renda mensal aproximada (R$)</label><input id="income" name="income" type="number" min="0" step="100" placeholder="Ex.: 2500"></div>
+            <div class="field"><label for="purpose">Finalidade</label><select id="purpose" name="purpose"><option value="">Selecione (opcional)</option><option>Organização financeira</option><option>Reforma ou casa</option><option>Estudos</option><option>Despesas pessoais</option><option>Outro</option></select></div>
+          </div>
+          <label class="consent"><input type="checkbox" id="consent" required><span>Entendo que esta versão é uma demonstração e que meus dados não serão enviados. Li o aviso de privacidade desta página.</span></label>
+          <button class="btn btn-primary" type="submit" style="width:100%">Conferir resumo da simulação →</button>
+          <div id="formStatus" class="status" role="status" aria-live="polite"></div>
+          <div class="notice">Não informe senhas, dados bancários, número de cartão ou documentos nesta demonstração.</div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section section-white" id="duvidas">
+      <div class="container">
+        <div class="section-head"><span class="eyebrow">Perguntas frequentes</span><h2>O que você precisa saber</h2><p>Transparência faz parte de uma boa decisão financeira.</p></div>
+        <div class="faq">
+          <details><summary>A simulação garante que meu empréstimo será aprovado?</summary><p>Não. A simulação é ilustrativa e não representa uma oferta, aprovação ou garantia de crédito.</p></details>
+          <details><summary>O valor da parcela é definitivo?</summary><p>Não. O valor mostrado usa uma taxa mensal ilustrativa de 3% apenas para demonstrar o cálculo. Uma proposta real deve informar taxa, CET, tributos, tarifas e demais condições aplicáveis.</p></details>
+          <details><summary>Meus dados são enviados quando preencho o formulário?</summary><p>Não nesta versão. O formulário funciona somente no navegador e mostra um resumo na tela. Um envio real exige configurar e testar um serviço de backend seguro e uma política de privacidade adequada.</p></details>
+          <details><summary>O Crédito Ágil é uma instituição financeira?</summary><p>Esta página é um protótipo de interface. Antes de oferecer crédito real, será necessário identificar claramente a empresa responsável, verificar as exigências legais aplicáveis e integrar uma instituição ou serviço autorizado quando necessário.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta"><div><h2>Comece com uma simulação.</h2><p>Veja os valores com calma e escolha o próximo passo com informação.</p></div><a class="btn" href="#simulador">Simular agora →</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div><a class="brand" href="#"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a><p>Protótipo de site para simulação ilustrativa de parcelas. Ainda não oferece, aprova ou concede empréstimos.</p></div>
+        <div><strong>Importante</strong><p>Confira todas as condições antes de contratar crédito. Não pague taxas antecipadas para liberar empréstimo sem verificar a legitimidade da instituição.</p></div>
+      </div>
+      <div class="footer-bottom">© <span id="year"></span> Crédito Ágil. Protótipo inicial. | Aviso de privacidade: nenhum dado deste formulário é transmitido nesta versão.</div>
+    </div>
+  </footer>
+  <script>
+    const amount = document.getElementById('loanAmount');
+    const term = document.getElementById('loanTerm');
+    const amountDisplay = document.getElementById('amountDisplay');
+    const monthlyPayment = document.getElementById('monthlyPayment');
+    const totalPayment = document.getElementById('totalPayment');
+    const money = value => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
+    function updateSimulation(){
+      const principal = Number(amount.value);
+      const months = Number(term.value);
+      const rate = 0.03; // Taxa ilustrativa; não é uma oferta de crédito.
+      const payment = principal * rate / (1 - Math.pow(1 + rate, -months));
+      amountDisplay.textContent = money(principal);
+      monthlyPayment.textContent = money(payment);
+      totalPayment.textContent = 'Total estimado: ' + money(payment * months) + ' em ' + months + ' parcelas';
+    }
+    amount.addEventListener('input', updateSimulation);
+    term.addEventListener('change', updateSimulation);
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const phone = document.getElementById('phone');
+    phone.addEventListener('input', () => {
+      let digits = phone.value.replace(/\D/g,'').slice(0,11);
+      if(digits.length > 10) digits = digits.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+      else if(digits.length > 6) digits = digits.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+      else if(digits.length > 2) digits = digits.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+      else if(digits.length) digits = '(' + digits;
+      phone.value = digits;
+    });
+    document.getElementById('applicationForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const status = document.getElementById('formStatus');
+      if(!event.currentTarget.reportValidity()) return;
+      const data = new FormData(event.currentTarget);
+      const principal = Number(amount.value);
+      const months = Number(term.value);
+      const rate = 0.03;
+      const payment = principal * rate / (1 - Math.pow(1 + rate, -months));
+      status.className = 'status show success';
+      status.textContent = 'Resumo de demonstração para ' + data.get('fullName') + ': valor simulado de ' + money(principal) + ' em ' + months + ' parcelas estimadas de ' + money(payment) + '. Nenhum dado foi enviado ou salvo. Para receber uma solicitação real, ainda precisamos configurar o backend seguro.';
+      status.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+    updateSimulation();
+  </script>
+</body>
+</html>
