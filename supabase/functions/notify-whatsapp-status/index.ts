@@ -25,10 +25,10 @@ Deno.serve(async (req: Request) => {
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const metaToken = Deno.env.get("WHATSAPP_ACCESS_TOKEN");
   const phoneNumberId = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID");
-  const graphVersion = Deno.env.get("WHATSAPP_GRAPH_API_VERSION") || "v23.0";
+  const graphVersion = Deno.env.get("WHATSAPP_GRAPH_API_VERSION");
   const templateName = Deno.env.get("WHATSAPP_STATUS_TEMPLATE_NAME") || "credito_agil_status_update";
 
-  if (!supabaseUrl || !anonKey || !serviceRoleKey || !metaToken || !phoneNumberId) {
+  if (!supabaseUrl || !anonKey || !serviceRoleKey || !metaToken || !phoneNumberId || !graphVersion) {
     return json(503, { error: "Integração WhatsApp ainda não configurada no servidor." });
   }
 
@@ -36,7 +36,7 @@ Deno.serve(async (req: Request) => {
     global: { headers: { Authorization: authHeader } },
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const { data: userData, error: userError } = await userClient.auth.getUser();
+  const accessToken = authHeader.slice("Bearer ".length);\n  const { data: userData, error: userError } = await userClient.auth.getUser(accessToken);
   if (userError || !userData.user) return json(401, { error: "Sessão inválida." });
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey, {
