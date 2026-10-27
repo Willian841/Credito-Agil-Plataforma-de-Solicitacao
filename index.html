@@ -182,13 +182,14 @@
             <div class="field full"><label for="fullName">Nome completo</label><input id="fullName" name="fullName" autocomplete="name" required minlength="3" placeholder="Digite seu nome"></div>
             <div class="field"><label for="phone">Telefone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="(00) 00000-0000"></div>
             <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="voce@exemplo.com"></div>
+            <div class="field full"><label for="cpf">CPF</label><input id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" required placeholder="000.000.000-00" aria-describedby="cpfHelp"><small id="cpfHelp" style="color:var(--muted);font-size:.8rem">O CPF será validado apenas neste navegador. A consulta de pendências ainda não está integrada.</small></div>
             <div class="field"><label for="income">Renda mensal aproximada (R$)</label><input id="income" name="income" type="number" min="0" step="100" placeholder="Ex.: 2500"></div>
             <div class="field"><label for="purpose">Finalidade</label><select id="purpose" name="purpose"><option value="">Selecione (opcional)</option><option>Organização financeira</option><option>Reforma ou casa</option><option>Estudos</option><option>Despesas pessoais</option><option>Outro</option></select></div>
           </div>
-          <label class="consent"><input type="checkbox" id="consent" required><span>Autorizo abrir o WhatsApp com os dados que preenchi para preparar minha solicitação. Vou revisar a mensagem e só a enviarei se concordar.</span></label>
+          <label class="consent"><input type="checkbox" id="consent" required><span>Entendo que esta versão ainda não consulta pendências financeiras. Autorizo abrir o WhatsApp com os dados da solicitação, exceto o CPF, que não será incluído na mensagem. Vou revisar tudo antes de enviar.</span></label>
           <button class="btn btn-primary" type="submit" style="width:100%">Conferir resumo da simulação →</button>
           <div id="formStatus" class="status" role="status" aria-live="polite"></div>
-          <div class="notice">Ao continuar, o WhatsApp abrirá com a mensagem preenchida. Nada é enviado automaticamente. Não inclua senhas, dados bancários, número de cartão ou documentos.</div>
+          <div class="notice">O CPF não será enviado pelo WhatsApp nem armazenado por esta página. A validação verifica apenas se o número tem formato válido; não verifica dívidas, restrições ou score. Não inclua senhas nem dados bancários.</div>
         </form>
       </div>
     </section>
@@ -240,6 +241,36 @@
     amount.addEventListener('input', updateSimulation);
     term.addEventListener('change', updateSimulation);
     document.getElementById('year').textContent = new Date().getFullYear();
+    const cpfInput = document.getElementById('cpf');
+    function formatCpf(value){
+      const digits = value.replace(/\\D/g,'').slice(0,11);
+      return digits.replace(/(\\d{3})(\\d)/,'$1.$2').replace(/(\\d{3})(\\d)/,'$1.$2').replace(/(\\d{3})(\\d{1,2})$/,'$1-$2');
+    }
+    function isValidCpf(value){
+      const cpf = value.replace(/\\D/g,'');
+      if(cpf.length !== 11 || /^(\\d)\\1{10}$/.test(cpf)) return false;
+      let sum = 0;
+      for(let i=0;i<9;i++) sum += Number(cpf[i]) * (10-i);
+      let digit = (sum * 10) % 11;
+      if(digit === 10) digit = 0;
+      if(digit !== Number(cpf[9])) return false;
+      sum = 0;
+      for(let i=0;i<10;i++) sum += Number(cpf[i]) * (11-i);
+      digit = (sum * 10) % 11;
+      if(digit === 10) digit = 0;
+      return digit === Number(cpf[10]);
+    }
+    cpfInput.addEventListener('input', () => {
+      cpfInput.value = formatCpf(cpfInput.value);
+      cpfInput.setCustomValidity('');
+    });
+    cpfInput.addEventListener('blur', () => {
+      if(cpfInput.value && !isValidCpf(cpfInput.value)){
+        cpfInput.setCustomValidity('Digite um CPF válido.');
+      } else {
+        cpfInput.setCustomValidity('');
+      }
+    });
     const phone = document.getElementById('phone');
     phone.addEventListener('input', () => {
       let digits = phone.value.replace(/\D/g,'').slice(0,11);
@@ -252,6 +283,12 @@
     document.getElementById('applicationForm').addEventListener('submit', event => {
       event.preventDefault();
       const status = document.getElementById('formStatus');
+      if(!isValidCpf(cpfInput.value)){
+        cpfInput.setCustomValidity('Digite um CPF válido.');
+        cpfInput.reportValidity();
+        return;
+      }
+      cpfInput.setCustomValidity('');
       if(!event.currentTarget.reportValidity()) return;
       const data = new FormData(event.currentTarget);
       const principal = Number(amount.value);
