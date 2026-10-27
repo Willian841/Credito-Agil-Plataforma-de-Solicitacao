@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#0b5ed7"><title>Acompanhar solicitação | Crédito Ágil</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#243b53;background:#f4f8ff;--blue:#0b5ed7;--navy:#102a43;--line:#d9e5f2;--muted:#627d98}
-*{box-sizing:border-box}body{margin:0;line-height:1.55}.container{width:min(760px,calc(100% - 28px));margin:36px auto}.brand{font-weight:850;font-size:1.2rem;color:var(--navy);margin-bottom:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 18px 48px #102a4310;margin-bottom:18px}h1,h2{color:var(--navy);line-height:1.2}h1{font-size:clamp(1.8rem,5vw,2.5rem);margin-top:0}p{color:var(--muted)}.field{display:grid;gap:7px;margin:16px 0}label{font-weight:750;font-size:.92rem}input,select,button{font:inherit}input,select{width:100%;padding:12px 13px;border:1px solid #cbd9e8;border-radius:10px;background:#fff;color:var(--navy)}button,.btn{border:0;border-radius:11px;padding:12px 16px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}button:disabled{opacity:.6;cursor:wait}.status{display:none;padding:14px;border-radius:10px;margin-top:14px}.status.show{display:block}.success{background:#e4f8ef;color:#086744}.error{background:#fff0ee;color:#a52b20}.notice{background:#f0f6fd;border-radius:10px;padding:13px;font-size:.86rem;color:#526d86}.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.full{grid-column:1/-1}.pill{display:inline-block;border-radius:99px;background:#e5f1ff;color:#0752b5;padding:5px 10px;font-size:.82rem;font-weight:800}@media(max-width:540px){.container{margin:20px auto}.card{padding:19px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+*{box-sizing:border-box}body{margin:0;line-height:1.55}.container{width:min(760px,calc(100% - 28px));margin:36px auto}.brand{font-weight:850;font-size:1.2rem;color:var(--navy);margin-bottom:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 18px 48px #102a4310;margin-bottom:18px}h1,h2{color:var(--navy);line-height:1.2}h1{font-size:clamp(1.8rem,5vw,2.5rem);margin-top:0}p{color:var(--muted)}.field{display:grid;gap:7px;margin:16px 0}label{font-weight:750;font-size:.92rem}input,select,button{font:inherit}input,select{width:100%;padding:12px 13px;border:1px solid #cbd9e8;border-radius:10px;background:#fff;color:var(--navy)}button,.btn{border:0;border-radius:11px;padding:12px 16px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}button:disabled{opacity:.6;cursor:wait}.status{display:none;padding:14px;border-radius:10px;margin-top:14px}.status.show{display:block}.success{background:#e4f8ef;color:#086744}.error{background:#fff0ee;color:#a52b20}.notice{background:#f0f6fd;border-radius:10px;padding:13px;font-size:.86rem;color:#526d86}.fee-panel{border:1px solid #c9dcf4;background:#f8fbff;border-radius:14px;padding:16px;margin:16px 0}.fee-panel h3{margin:0 0 8px;color:#102a43}.fee-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #d9e5f2}.fee-row:last-of-type{border-bottom:0}.fee-warning{color:#8a3c10;background:#fff4e8;border-radius:9px;padding:11px;font-size:.86rem;margin-top:12px}.whatsapp-btn{background:#16835b;margin-top:12px}.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.full{grid-column:1/-1}.pill{display:inline-block;border-radius:99px;background:#e5f1ff;color:#0752b5;padding:5px 10px;font-size:.82rem;font-weight:800}@media(max-width:540px){.container{margin:20px auto}.card{padding:19px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -24,6 +24,14 @@
 <h2>Resultado da solicitação</h2>
 <p id="applicationSummary"></p>
 <div id="approvalMessage" class="notice"></div>
+<div id="approvedSupport" class="fee-panel hidden">
+<h3>Condições de recebimento e atendimento</h3>
+<p style="margin:6px 0 10px">Use os valores abaixo apenas como referência para esclarecer condições com o atendimento. Eles não são uma cobrança automática nem uma garantia de aprovação ou liberação.</p>
+<div class="fee-row"><span>Solicitações de até R$ 1.000,00</span><strong>R$ 50,00</strong></div>
+<div class="fee-row"><span>Solicitações acima de R$ 1.000,00</span><strong>R$ 70,00 ou mais</strong></div>
+<div class="fee-warning"><strong>Atenção:</strong> não pague taxa antecipada para liberar um empréstimo nem faça Pix sem verificar a identidade da empresa, receber contrato e confirmar que qualquer custo é legítimo, obrigatório e está descrito nas condições contratuais. O Crédito Ágil não gera uma chave Pix de cobrança nesta página. Se houver dúvidas, fale com o atendimento antes de pagar qualquer valor.</div>
+<a id="whatsappSupport" class="btn whatsapp-btn" href="https://wa.me/5577988535882" target="_blank" rel="noopener noreferrer">Tirar dúvidas pelo WhatsApp</a>
+</div>
 <form id="payoutForm" class="hidden">
 <h2>Dados para recebimento</h2>
 <p>Esta etapa fica disponível apenas quando o status estiver aprovado. Escolha Pix ou conta bancária. Não informe senha, token, número de cartão ou CVV.</p>
@@ -82,6 +90,7 @@ lookupForm.addEventListener('submit',async event=>{
  showStatus(lookupStatus,'Consultando…','success');
  document.getElementById('applicationCard').classList.add('hidden');
  document.getElementById('payoutForm').classList.add('hidden');
+ document.getElementById('approvedSupport').classList.add('hidden');
  const {data,error}=await supabaseClient.rpc('get_application_status',{p_code:activeCode});
  button.disabled=false;
  if(error){showStatus(lookupStatus,'Não foi possível consultar. Confirme se a migração de acompanhamento foi executada no Supabase.','error');return;}
@@ -93,6 +102,9 @@ lookupForm.addEventListener('submit',async event=>{
  const payout=document.getElementById('payoutForm');
  if(data.status==='Aprovado'){
   approval.textContent=data.has_payout_details?'Sua solicitação está aprovada. Você já enviou os dados de recebimento; pode atualizá-los abaixo se necessário.':'Sua solicitação está aprovada. Preencha os dados de recebimento abaixo. A equipe autorizada poderá consultá-los no painel.';
+  document.getElementById('approvedSupport').classList.remove('hidden');
+  const supportMessage='Olá! Minha solicitação no Crédito Ágil foi aprovada. Código de acompanhamento: '+activeCode+'. Valor solicitado: '+Number(data.loan_amount).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'. Gostaria de confirmar as condições contratuais, eventuais custos e os dados para recebimento. Não farei pagamento antecipado sem verificar a legitimidade e o contrato.';
+  document.getElementById('whatsappSupport').href='https://wa.me/5577988535882?text='+encodeURIComponent(supportMessage);
   payout.classList.remove('hidden');
  }else if(data.status==='Recusado'){
   approval.textContent='Sua solicitação está com status recusado. A etapa de dados de recebimento não está disponível.';
