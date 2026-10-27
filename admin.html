@@ -15,13 +15,13 @@
 <section class="panel" style="margin-top:18px">
 <h1>Painel administrativo</h1>
 <p>Entre com a conta de administrador autorizada no Supabase para consultar solicitações. Esta página não cria uma conta automaticamente.</p>
-<div id="configWarning" class="status">Configuração pendente: adicione a URL do projeto Supabase e a chave publicável (anon) neste arquivo. Nunca coloque a chave service_role no navegador.</div>
+<div id="configWarning" class="status">Supabase configurado. Para entrar, crie sua conta em Supabase Authentication e autorize seu usuário na tabela admin_users. Nunca coloque a chave secreta no navegador.</div>
 <form id="loginForm">
 <div class="field"><label for="email">E-mail do administrador</label><input id="email" type="email" autocomplete="username" required></div>
 <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required></div>
 <div class="row"><button type="submit" id="loginButton">Entrar</button><button type="button" id="logoutButton" class="secondary hidden">Sair</button></div>
 </form>
-<div id="status" class="status" role="status" aria-live="polite">Configure as credenciais do Supabase e execute o arquivo supabase-setup.sql antes de usar.</div>
+<div id="status" class="status" role="status" aria-live="polite">Supabase configurado. Crie uma conta de administrador e adicione o UUID dela à tabela admin_users antes de entrar.</div>
 </section>
 <section id="dashboard" class="panel hidden">
 <div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><button id="refreshButton" class="secondary">Atualizar lista</button></div>
@@ -30,11 +30,11 @@
 <p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
 </main>
 <script>
-  // Preencha apenas com a URL do projeto e a chave publicável/anon do Supabase.
+  // URL do projeto e chave publicável do Supabase.
   // Nunca use a chave service_role em páginas públicas.
-  const SUPABASE_URL = 'COLE_A_URL_DO_PROJETO_SUPABASE';
-  const SUPABASE_ANON_KEY = 'COLE_A_CHAVE_PUBLICAVEL_DO_SUPABASE';
-  const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('COLE_A_') && !SUPABASE_ANON_KEY.includes('COLE_A_');
+  const SUPABASE_URL = 'https://vofdcnjnedxnqbnpeoon.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_bMKQRogilwPwg-RBTboG_Q_G_13-y62';
+  const configured = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.startsWith('sb_publishable_');
   const statusEl = document.getElementById('status');
   let supabaseClient = null;
   const setStatus = (message) => { statusEl.textContent = message; };
