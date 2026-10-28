@@ -82,24 +82,50 @@ td,th{overflow-wrap:anywhere}
     setStatus('Supabase configurado. Entre com a conta de administrador.');
     supabaseClient.auth.onAuthStateChange((_event, session) => {
       const loggedIn = !!session;
-      document.getElementById('dashboard').classList.toggle('hidden', !loggedIn);
+      // Hide protected content until the session is confirmed as an authorized admin.
+      document.getElementById('dashboard').classList.add('hidden');
       document.getElementById('logoutButton').classList.toggle('hidden', !loggedIn);
       document.getElementById('loginButton').classList.toggle('hidden', loggedIn);
       document.getElementById('loginForm').querySelectorAll('input').forEach(input => input.disabled = loggedIn);
-      if (loggedIn) {
-        if (!pollTimer) {
-          notificationsInitialized = false;
-          knownApplicationIds = new Set();
-          loadApplications();
-          pollTimer = setInterval(() => loadApplications(true), 30000);
-        }
-      } else {
-        if (pollTimer) clearInterval(pollTimer);
-        pollTimer = null;
-        knownApplicationIds = new Set();
-        notificationsInitialized = false;
-        document.getElementById('notificationBanner').classList.add('hidden');
+
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = null;
+      knownApplicationIds = new Set();
+      notificationsInitialized = false;
+      document.getElementById('notificationBanner').classList.add('hidden');
+
+      if (!loggedIn) {
+        setStatus('Entre com uma conta autorizada na tabela admin_users.');
+        return;
       }
+
+      setStatus('Verificando autorização administrativa…');
+      // Do not expose the dashboard to every authenticated Supabase user.
+      Promise.resolve().then(async () => {
+        const { data: membership, error: membershipError } = await supabaseClient
+          .from('admin_users')
+          .select('user_id')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+
+        const { data: currentSessionData } = await supabaseClient.auth.getSession();
+        const currentSession = currentSessionData && currentSessionData.session;
+        if (!currentSession || currentSession.user.id !== session.user.id) return;
+
+        if (membershipError || !membership) {
+          document.getElementById('dashboard').classList.add('hidden');
+          setStatus('Acesso negado: esta conta não está autorizada como administradora. Saia e entre com a conta correta.');
+          return;
+        }
+
+        document.getElementById('dashboard').classList.remove('hidden');
+        setStatus('Acesso administrativo confirmado.');
+        loadApplications();
+        pollTimer = setInterval(() => loadApplications(true), 30000);
+      }).catch(() => {
+        document.getElementById('dashboard').classList.add('hidden');
+        setStatus('Não foi possível verificar a autorização. O painel permaneceu bloqueado; tente sair e entrar novamente.');
+      });
     });
   }
   document.getElementById('loginForm').addEventListener('submit', async (event) => {
