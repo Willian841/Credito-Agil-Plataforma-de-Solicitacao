@@ -13,7 +13,7 @@
 .bulk-tools button{padding:9px 12px;font-size:.85rem}
 .bulk-tools button:disabled{opacity:.45;cursor:not-allowed}
 .row-check{width:18px;height:18px;cursor:pointer;accent-color:var(--blue)}
-.archive-badge{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:#fff0d5;color:#875b08;font-size:.75rem}@media(max-width:600px){.bulk-tools>*{max-width:100%;width:100%}.filters label{display:grid;gap:5px}.detail-card{padding:17px}}
+.archive-badge{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:#fff0d5;color:#875b08;font-size:.75rem}.notes-panel{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}.notes-panel h3{margin:0 0 8px;color:#102a43}.note-list{max-height:240px;overflow:auto}.note-item{padding:12px;margin:8px 0;background:#f5f8fc;border-radius:10px;overflow-wrap:anywhere}.note-item small{display:block;color:#627d98;margin-bottom:5px}.note-item p{margin:0;white-space:pre-wrap;color:#18324b}@media(max-width:600px){.notes-panel textarea{max-width:100%}}@media(max-width:600px){.bulk-tools>*{max-width:100%;width:100%}.filters label{display:grid;gap:5px}.detail-card{padding:17px}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -35,7 +35,7 @@
 <div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><div class="row"><button id="enableNotifications" class="secondary" type="button">Ativar notificações</button><button id="refreshButton" class="secondary">Atualizar lista</button></div></div><div id="notificationBanner" class="notice-banner hidden" role="status" aria-live="polite"><div><strong id="notificationTitle">Nova solicitação recebida</strong><p id="notificationMessage">Uma nova solicitação chegou ao Crédito Ágil.</p></div><button id="dismissNotification" type="button" class="secondary">Dispensar</button></div>
 <div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select><label>De <input id="filterDateFrom" type="date" aria-label="Data inicial"></label><label>Até <input id="filterDateTo" type="date" aria-label="Data final"></label></div><div class="bulk-tools"><label for="bulkStatusSelect">Status em massa</label><select id="bulkStatusSelect" class="status-select"><option>Pendente</option><option>Aprovado</option><option>Recusado</option></select><button type="button" id="bulkStatusButton" class="secondary" disabled>Aplicar aos selecionados (0)</button><button type="button" id="exportCsvButton" class="secondary">Exportar CSV</button><button type="button" id="manageAdminsButton" class="secondary">Gerenciar administradores</button><span class="hint" id="bulkHint">Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico.</span><button type="button" id="bulkActionButton" disabled>Arquivar selecionados (0)</button><button type="button" id="toggleArchivedButton" class="secondary">Ver arquivados</button></div><div class="table-wrap"><table><thead><tr><th><input id="selectVisible" class="row-check" type="checkbox" aria-label="Selecionar todas as solicitações pendentes visíveis"></th><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="8">Nenhuma consulta carregada.</td></tr></tbody></table></div>
 </section>
-<section id="detailOverlay" class="detail-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><div class="row" style="justify-content:space-between"><h2 id="detailTitle">Detalhes da solicitação</h2><button type="button" id="closeDetails" class="secondary">Fechar</button></div><p class="muted" id="detailReceived"></p><div id="detailGrid" class="detail-grid"></div><div class="detail-actions"><button type="button" id="closeDetailsBottom" class="secondary">Voltar à lista</button></div></div></section>
+<section id="detailOverlay" class="detail-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><div class="row" style="justify-content:space-between"><h2 id="detailTitle">Detalhes da solicitação</h2><button type="button" id="closeDetails" class="secondary">Fechar</button></div><p class="muted" id="detailReceived"></p><div id="detailGrid" class="detail-grid"></div><section class="notes-panel"><h3>Observações internas</h3><p class="muted">Apenas administradores autorizados podem acessar estas observações.</p><label for="newAdminNote">Nova observação</label><textarea id="newAdminNote" maxlength="3000" rows="3" style="width:100%;font:inherit;padding:12px;border:1px solid #bdcddd;border-radius:9px" placeholder="Escreva uma observação interna"></textarea><div class="row"><button type="button" id="saveAdminNote">Salvar observação</button></div><div id="adminNotesList" class="note-list"></div></section><section class="notes-panel"><h3>Histórico da solicitação</h3><div id="applicationHistory" class="note-list"><p class="muted">Carregando histórico…</p></div></section><div class="detail-actions"><button type="button" id="closeDetailsBottom" class="secondary">Voltar à lista</button></div></div></section>
 <p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
 </main>
 <script>
@@ -104,7 +104,8 @@
   document.getElementById('filterDateTo').addEventListener('change', renderApplications);
   document.getElementById('exportCsvButton').addEventListener('click', exportApplicationsCsv);
   document.getElementById('bulkStatusButton').addEventListener('click', updateSelectedStatuses);
-  document.getElementById('manageAdminsButton').addEventListener('click', () => { window.open('https://supabase.com/dashboard/project/vofdcnjnedxnqbnpeoon/editor','_blank','noopener,noreferrer'); setStatus('Gerencie contas em Authentication > Users e autorizações na tabela admin_users do Supabase. Não compartilhe chaves secretas.'); });
+  document.getElementById('manageAdminsButton').addEventListener('click', () => { window.open('https://supabase.com/dashboard/project/vofdcnjnedxnqbnpeoon/editor','_blank','noopener,noreferrer'); setStatus('Gerencie contas em Authentication > Users e autorizações na tabela admin_users do Supabase. A criação de contas exige acesso administrativo seguro; não compartilhe chaves secretas.'); });
+  document.getElementById('saveAdminNote').addEventListener('click', saveAdminNote);
   document.getElementById('closeDetails').addEventListener('click', closeDetails);
   document.getElementById('closeDetailsBottom').addEventListener('click', closeDetails);
   document.getElementById('detailOverlay').addEventListener('click', (event) => { if (event.target.id === 'detailOverlay') closeDetails(); });
@@ -310,6 +311,50 @@
     setStatus(changed+' solicitação(ões) atualizada(s).'+(failed?' Falha em '+failed+' registro(s).':''));
   }
 
+  let currentDetailApplicationId = null;
+  async function saveAdminNote() {
+    const id = currentDetailApplicationId;
+    const note = document.getElementById('newAdminNote').value.trim();
+    if (!id || !note) { setStatus('Abra uma solicitação e escreva uma observação antes de salvar.'); return; }
+    const button = document.getElementById('saveAdminNote'); button.disabled = true;
+    const { error } = await supabaseClient.from('admin_application_notes').insert({application_id:String(id),note});
+    button.disabled = false;
+    if (error) { setStatus('Não foi possível salvar a observação. Execute a migração SQL do painel no Supabase e confira se seu usuário é administrador.'); return; }
+    document.getElementById('newAdminNote').value = '';
+    await supabaseClient.from('admin_application_events').insert({application_id:String(id),event_type:'note_added',details:'Observação interna adicionada'});
+    const item = allApplications.find(app => String(app.id) === String(id));
+    if (item) await loadAdminNotesAndHistory(item);
+    setStatus('Observação interna salva.');
+  }
+  async function loadAdminNotesAndHistory(item) {
+    const notesList = document.getElementById('adminNotesList');
+    const historyList = document.getElementById('applicationHistory');
+    notesList.replaceChildren(); historyList.replaceChildren();
+    const [notes, events] = await Promise.all([
+      supabaseClient.from('admin_application_notes').select('note,created_at').eq('application_id',String(item.id)).order('created_at',{ascending:false}).limit(50),
+      supabaseClient.from('admin_application_events').select('event_type,old_value,new_value,details,created_at').eq('application_id',String(item.id)).order('created_at',{ascending:false}).limit(50)
+    ]);
+    if (notes.error) {
+      const p=document.createElement('p');p.className='muted';p.textContent='Execute a migração SQL dos recursos administrativos para ativar as observações.';notesList.append(p);
+    } else if (!(notes.data||[]).length) {
+      const p=document.createElement('p');p.className='muted';p.textContent='Nenhuma observação registrada.';notesList.append(p);
+    } else for (const n of notes.data) {
+      const box=document.createElement('div');box.className='note-item';
+      const meta=document.createElement('small');meta.textContent=new Date(n.created_at).toLocaleString('pt-BR');
+      const body=document.createElement('p');body.textContent=n.note;box.append(meta,body);notesList.append(box);
+    }
+    if (events.error) {
+      const p=document.createElement('p');p.className='muted';p.textContent='Histórico indisponível até executar a migração SQL.';historyList.append(p);
+    } else if (!(events.data||[]).length) {
+      const p=document.createElement('p');p.className='muted';p.textContent='Nenhuma alteração registrada após ativar o histórico.';historyList.append(p);
+    } else for (const e of events.data) {
+      const box=document.createElement('div');box.className='note-item';
+      const meta=document.createElement('small');meta.textContent=new Date(e.created_at).toLocaleString('pt-BR');
+      const body=document.createElement('p');
+      body.textContent=e.event_type==='status_changed' ? 'Status: '+(e.old_value||'—')+' → '+(e.new_value||'—') : (e.details||e.event_type);
+      box.append(meta,body);historyList.append(box);
+    }
+  }
   function notifyNewApplication(count) {
     const banner = document.getElementById('notificationBanner');
     document.getElementById('notificationTitle').textContent = count === 1 ? 'Nova solicitação recebida!' : count + ' novas solicitações recebidas!';
@@ -349,6 +394,9 @@
     if (!silent) setStatus(allApplications.length + ' solicitação(ões) carregada(s).');
   }
   function showDetails(item) {
+    currentDetailApplicationId = String(item.id);
+    document.getElementById("newAdminNote").value = "";
+    loadAdminNotesAndHistory(item);
     const money = (value) => value === null || value === undefined || value === '' ? 'Não informado' : Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const date = item.created_at ? new Date(item.created_at).toLocaleString('pt-BR') : 'Não informado';
     document.getElementById('detailReceived').textContent = 'Solicitação recebida em ' + date;
