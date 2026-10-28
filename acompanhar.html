@@ -6,6 +6,24 @@
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#243b53;background:#f4f8ff;--blue:#0b5ed7;--navy:#102a43;--line:#d9e5f2;--muted:#627d98}
 *{box-sizing:border-box}body{margin:0;line-height:1.55}.container{width:min(760px,calc(100% - 28px));margin:36px auto}.brand{font-weight:850;font-size:1.2rem;color:var(--navy);margin-bottom:20px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 18px 48px #102a4310;margin-bottom:18px}h1,h2{color:var(--navy);line-height:1.2}h1{font-size:clamp(1.8rem,5vw,2.5rem);margin-top:0}p{color:var(--muted)}.field{display:grid;gap:7px;margin:16px 0}label{font-weight:750;font-size:.92rem}input,select,button{font:inherit}input,select{width:100%;padding:12px 13px;border:1px solid #cbd9e8;border-radius:10px;background:#fff;color:var(--navy)}button,.btn{border:0;border-radius:11px;padding:12px 16px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}button:disabled{opacity:.6;cursor:wait}.status{display:none;padding:14px;border-radius:10px;margin-top:14px}.status.show{display:block}.success{background:#e4f8ef;color:#086744}.error{background:#fff0ee;color:#a52b20}.notice{background:#f0f6fd;border-radius:10px;padding:13px;font-size:.86rem;color:#526d86}.fee-panel{border:1px solid #c9dcf4;background:#f8fbff;border-radius:14px;padding:16px;margin:16px 0}.fee-panel h3{margin:0 0 8px;color:#102a43}.fee-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #d9e5f2}.fee-row:last-of-type{border-bottom:0}.fee-warning{color:#8a3c10;background:#fff4e8;border-radius:9px;padding:11px;font-size:.86rem;margin-top:12px}.whatsapp-btn{background:#16835b;margin-top:12px}.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.full{grid-column:1/-1}.pill{display:inline-block;border-radius:99px;background:#e5f1ff;color:#0752b5;padding:5px 10px;font-size:.82rem;font-weight:800}@media(max-width:540px){.container{margin:20px auto}.card{padding:19px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+
+/* Usabilidade em Android e telas pequenas */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,.btn,input,select{min-height:46px}
+input,select,textarea{font-size:16px;max-width:100%}
+button,.btn{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #8bbcff;outline-offset:2px}
+.container,.card,.fee-panel,.fee-row{min-width:0}
+.fee-row span{overflow-wrap:anywhere}
+@media(max-width:540px){
+ .container{width:calc(100% - 24px);margin:14px auto}
+ .card{padding:16px;border-radius:14px}
+ h1{font-size:1.75rem}
+ button,.btn{width:100%;min-height:48px}
+ .fee-row{align-items:flex-start;flex-wrap:wrap}
+ .fee-row>*{max-width:100%;overflow-wrap:anywhere}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
