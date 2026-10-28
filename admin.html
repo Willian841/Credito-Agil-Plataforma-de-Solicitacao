@@ -13,7 +13,7 @@
 .bulk-tools button{padding:9px 12px;font-size:.85rem}
 .bulk-tools button:disabled{opacity:.45;cursor:not-allowed}
 .row-check{width:18px;height:18px;cursor:pointer;accent-color:var(--blue)}
-.archive-badge{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:#fff0d5;color:#875b08;font-size:.75rem}
+.archive-badge{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:#fff0d5;color:#875b08;font-size:.75rem}@media(max-width:600px){.bulk-tools>*{max-width:100%;width:100%}.filters label{display:grid;gap:5px}.detail-card{padding:17px}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -33,7 +33,7 @@
 </section>
 <section id="dashboard" class="panel hidden">
 <div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><div class="row"><button id="enableNotifications" class="secondary" type="button">Ativar notificações</button><button id="refreshButton" class="secondary">Atualizar lista</button></div></div><div id="notificationBanner" class="notice-banner hidden" role="status" aria-live="polite"><div><strong id="notificationTitle">Nova solicitação recebida</strong><p id="notificationMessage">Uma nova solicitação chegou ao Crédito Ágil.</p></div><button id="dismissNotification" type="button" class="secondary">Dispensar</button></div>
-<div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select></div><div class="bulk-tools"><span class="hint" id="bulkHint">Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico.</span><button type="button" id="bulkActionButton" disabled>Arquivar selecionados (0)</button><button type="button" id="toggleArchivedButton" class="secondary">Ver arquivados</button></div><div class="table-wrap"><table><thead><tr><th><input id="selectVisible" class="row-check" type="checkbox" aria-label="Selecionar todas as solicitações pendentes visíveis"></th><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="8">Nenhuma consulta carregada.</td></tr></tbody></table></div>
+<div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select><label>De <input id="filterDateFrom" type="date" aria-label="Data inicial"></label><label>Até <input id="filterDateTo" type="date" aria-label="Data final"></label></div><div class="bulk-tools"><label for="bulkStatusSelect">Status em massa</label><select id="bulkStatusSelect" class="status-select"><option>Pendente</option><option>Aprovado</option><option>Recusado</option></select><button type="button" id="bulkStatusButton" class="secondary" disabled>Aplicar aos selecionados (0)</button><button type="button" id="exportCsvButton" class="secondary">Exportar CSV</button><button type="button" id="manageAdminsButton" class="secondary">Gerenciar administradores</button><span class="hint" id="bulkHint">Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico.</span><button type="button" id="bulkActionButton" disabled>Arquivar selecionados (0)</button><button type="button" id="toggleArchivedButton" class="secondary">Ver arquivados</button></div><div class="table-wrap"><table><thead><tr><th><input id="selectVisible" class="row-check" type="checkbox" aria-label="Selecionar todas as solicitações pendentes visíveis"></th><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="8">Nenhuma consulta carregada.</td></tr></tbody></table></div>
 </section>
 <section id="detailOverlay" class="detail-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><div class="row" style="justify-content:space-between"><h2 id="detailTitle">Detalhes da solicitação</h2><button type="button" id="closeDetails" class="secondary">Fechar</button></div><p class="muted" id="detailReceived"></p><div id="detailGrid" class="detail-grid"></div><div class="detail-actions"><button type="button" id="closeDetailsBottom" class="secondary">Voltar à lista</button></div></div></section>
 <p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
@@ -100,6 +100,11 @@
   });
   document.getElementById('searchApplications').addEventListener('input', renderApplications);
   document.getElementById('filterStatus').addEventListener('change', renderApplications);
+  document.getElementById('filterDateFrom').addEventListener('change', renderApplications);
+  document.getElementById('filterDateTo').addEventListener('change', renderApplications);
+  document.getElementById('exportCsvButton').addEventListener('click', exportApplicationsCsv);
+  document.getElementById('bulkStatusButton').addEventListener('click', updateSelectedStatuses);
+  document.getElementById('manageAdminsButton').addEventListener('click', () => { window.open('https://supabase.com/dashboard/project/vofdcnjnedxnqbnpeoon/editor','_blank','noopener,noreferrer'); setStatus('Gerencie contas em Authentication > Users e autorizações na tabela admin_users do Supabase. Não compartilhe chaves secretas.'); });
   document.getElementById('closeDetails').addEventListener('click', closeDetails);
   document.getElementById('closeDetailsBottom').addEventListener('click', closeDetails);
   document.getElementById('detailOverlay').addEventListener('click', (event) => { if (event.target.id === 'detailOverlay') closeDetails(); });
@@ -169,8 +174,12 @@
       if (archivedView !== isArchived) return false;
       const status = item.status || 'Pendente';
       const matchesStatus = chosenStatus === 'Todos' || status === chosenStatus;
-      const searchable = [item.full_name, item.cpf, item.phone, item.email].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
-      return matchesStatus && searchable.includes(term);
+      const date = item.created_at ? new Date(item.created_at) : null;
+      const from = document.getElementById('filterDateFrom').value, to = document.getElementById('filterDateTo').value;
+      const matchesFrom = !from || (date && date >= new Date(from + 'T00:00:00'));
+      const matchesTo = !to || (date && date <= new Date(to + 'T23:59:59.999'));
+      const searchable = [item.full_name, item.cpf, item.phone, item.email, item.id].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
+      return matchesStatus && matchesFrom && matchesTo && searchable.includes(term);
     });
   }
   function updateStats(items) {
@@ -206,6 +215,8 @@
         updateBulkTools();
         document.getElementById('bulkActionButton').disabled = selectedApplicationIds.size === 0;
         document.getElementById('bulkActionButton').textContent = archivedView ? 'Restaurar selecionados (' + selectedApplicationIds.size + ')' : 'Arquivar selecionados (' + selectedApplicationIds.size + ')';
+        document.getElementById('bulkStatusButton').disabled = selectedApplicationIds.size === 0;
+        document.getElementById('bulkStatusButton').textContent = 'Aplicar aos selecionados (' + selectedApplicationIds.size + ')';
       });
       selectionCell.append(check); row.append(selectionCell);
       const cells = [
@@ -232,7 +243,9 @@
         const { error: updateError } = await supabaseClient.from('loan_applications').update({ status: chosen }).eq('id', item.id);
         saveButton.disabled = false;
         if (updateError) { setStatus('Não foi possível salvar o status. Verifique as permissões no Supabase.'); return; }
-        item.status = chosen; updateStats(allApplications); renderApplications();
+        item.status = chosen;
+        if (previousStatus !== chosen) await recordApplicationEvent(item.id, previousStatus, chosen, 'Status alterado no painel');
+        updateStats(allApplications); renderApplications();
         if (previousStatus === chosen) {
           setStatus('O status já estava como "' + chosen + '". Nenhuma nova notificação foi solicitada.');
           return;
@@ -259,6 +272,44 @@
     }
     updateBulkTools();
   }
+
+  async function recordApplicationEvent(applicationId, oldValue, newValue, details) {
+    const { error } = await supabaseClient.from('admin_application_events').insert({
+      application_id: String(applicationId), event_type: 'status_changed', old_value: oldValue,
+      new_value: newValue, details: details || 'Status alterado no painel'
+    });
+    if (error) console.warn('Histórico indisponível: execute a migração SQL dos recursos administrativos.');
+  }
+  function exportApplicationsCsv() {
+    const items = getVisibleApplications();
+    if (!items.length) { setStatus('Não há solicitações para exportar com os filtros atuais.'); return; }
+    const headers = ['ID','Recebido em','Cliente','Telefone','E-mail','CPF','Valor','Prazo','Parcela','Total','Renda','Finalidade','Status'];
+    const rows = items.map(i => [i.id,i.created_at ? new Date(i.created_at).toLocaleString('pt-BR') : '',i.full_name,i.phone,i.email,i.cpf,i.loan_amount,i.loan_term,i.monthly_payment,i.total_payment,i.income,i.purpose,i.status||'Pendente']);
+    const csv = [headers,...rows].map(row => row.map(v => '"' + String(v ?? '').replace(/"/g,'""') + '"').join(';')).join('\r\n');
+    const url = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));
+    const link = document.createElement('a'); link.href=url; link.download='credito-agil-relatorio-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.append(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+    setStatus(items.length+' solicitação(ões) exportada(s). Proteja o arquivo, pois contém dados pessoais.');
+  }
+  async function updateSelectedStatuses() {
+    const ids = [...selectedApplicationIds];
+    const chosen = document.getElementById('bulkStatusSelect').value;
+    const eligible = allApplications.filter(i => ids.includes(String(i.id)) && (archivedView || (i.status||'Pendente') === 'Pendente'));
+    if (!eligible.length) { setStatus('Selecione solicitações pendentes para alterar em massa.'); return; }
+    if (!window.confirm('Alterar o status de '+eligible.length+' solicitação(ões) para '+chosen+'?')) return;
+    const button = document.getElementById('bulkStatusButton'); button.disabled=true;
+    let changed=0, failed=0;
+    for (const item of eligible) {
+      const old = item.status || 'Pendente'; if (old===chosen) continue;
+      const {error} = await supabaseClient.from('loan_applications').update({status:chosen}).eq('id',item.id);
+      if (error) { failed++; continue; }
+      item.status=chosen; changed++;
+      await recordApplicationEvent(item.id,old,chosen,'Status alterado em massa no painel');
+    }
+    selectedApplicationIds.clear(); updateStats(allApplications); renderApplications();
+    setStatus(changed+' solicitação(ões) atualizada(s).'+(failed?' Falha em '+failed+' registro(s).':''));
+  }
+
   function notifyNewApplication(count) {
     const banner = document.getElementById('notificationBanner');
     document.getElementById('notificationTitle').textContent = count === 1 ? 'Nova solicitação recebida!' : count + ' novas solicitações recebidas!';
