@@ -393,6 +393,14 @@
     .negative-highlight span{color:#52677e!important;font-size:.91rem;line-height:1.5}
     @media(max-width:800px){.negative-highlight{padding:18px!important;align-items:flex-start}.negative-icon{flex-basis:42px;width:42px;height:42px;font-size:1.2rem}}
 
+
+    /* Correção: segundo botão da home visível sobre o fundo branco */
+    .hero .hero-actions{display:flex;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+    .hero .hero-actions .btn{width:auto;min-height:46px}
+    .hero .hero-actions .btn-outline{display:inline-flex!important;align-items:center;justify-content:center;background:#fff!important;border:1px solid #c6d6e8!important;color:#17324f!important;opacity:1!important;visibility:visible!important;text-decoration:none;box-shadow:0 3px 10px rgba(10,31,56,.04)}
+    .hero .hero-actions .btn-outline:hover{background:#f2f7fd!important;border-color:#1264e8!important;color:#084db7!important}
+    @media(max-width:500px){.hero .hero-actions{display:grid;grid-template-columns:1fr}.hero .hero-actions .btn{width:100%}}
+
 </style>
 </head>
 <body>
