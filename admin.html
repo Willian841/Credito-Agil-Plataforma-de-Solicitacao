@@ -7,6 +7,14 @@
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#18324b;background:#f3f7fc;--blue:#0b5ed7;--line:#dce6f1}
 *{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:36px auto;padding:0 18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 34px #18324b0d;margin-bottom:18px}h1,h2{margin-top:0;color:#102a43}p{color:#5b7187}.brand{font-weight:850;color:var(--blue);font-size:1.1rem}.field{display:grid;gap:7px;margin:14px 0}label{font-weight:700}input{font:inherit;padding:12px;border:1px solid #bdcddd;border-radius:9px;width:100%}button{font:inherit;font-weight:750;background:var(--blue);color:white;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}button.secondary{background:#eaf2fc;color:#174b87}button:disabled{opacity:.6;cursor:wait}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.status{padding:12px;border-radius:9px;background:#edf4fd;color:#254e7d;margin-top:12px}.hidden{display:none!important}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:top}th{background:#f7faff;color:#37536d}.muted{font-size:.85rem;color:#627d98}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5f1ff;color:#0752b5;font-size:.8rem;font-weight:700}.status-select{font:inherit;padding:8px;border:1px solid #bdcddd;border-radius:8px;min-width:135px;background:#fff;color:#18324b}.save-status{padding:8px 10px;font-size:.82rem}.status-cell{min-width:190px}.detail-btn{background:#eaf2fc;color:#174b87;padding:8px 10px;font-size:.82rem}.detail-overlay{position:fixed;inset:0;background:#102a4388;display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000}.detail-card{background:#fff;border-radius:18px;padding:24px;width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 70px #102a4350}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detail-item{padding:12px;background:#f5f8fc;border-radius:10px;min-width:0}.detail-item span{display:block;font-size:.8rem;color:#627d98;margin-bottom:5px}.detail-item strong{display:block;overflow-wrap:anywhere;white-space:pre-wrap;font-weight:650}.detail-actions{display:flex;justify-content:flex-end;margin-top:18px}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.stat-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:#f8fbff}.stat-card span{display:block;color:#627d98;font-size:.85rem;margin-bottom:8px}.stat-card strong{font-size:1.7rem;color:#102a43}.stat-card.pending{border-left:4px solid #e0a326}.stat-card.approved{border-left:4px solid #249764}.stat-card.rejected{border-left:4px solid #d94a4a}.filters{display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,220px);gap:12px;margin:16px 0}.filters input,.filters select{font:inherit;padding:11px;border:1px solid #bdcddd;border-radius:9px;background:#fff;color:#18324b;width:100%}.empty-filter{padding:18px;text-align:center;color:#627d98}.notice-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:12px;background:#e8f5ee;border:1px solid #b9e2c9;color:#175c38;margin:16px 0}.notice-banner strong{display:block}.notice-banner p{margin:4px 0 0;color:#286747;font-size:.9rem}.notice-banner button{white-space:nowrap}@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.filters{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}@media(max-width:600px){.panel{padding:17px}main{margin-top:20px}}
+
+.bulk-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;padding:13px;background:#f7faff;border:1px solid var(--line);border-radius:12px}
+.bulk-tools .hint{font-size:.85rem;color:#627d98;flex:1 1 220px}
+.bulk-tools button{padding:9px 12px;font-size:.85rem}
+.bulk-tools button:disabled{opacity:.45;cursor:not-allowed}
+.row-check{width:18px;height:18px;cursor:pointer;accent-color:var(--blue)}
+.archive-badge{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;background:#fff0d5;color:#875b08;font-size:.75rem}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -25,7 +33,7 @@
 </section>
 <section id="dashboard" class="panel hidden">
 <div class="row" style="justify-content:space-between"><div><h2>Solicitações recebidas</h2><p class="muted">Somente usuários cadastrados na tabela admin_users podem visualizar estes registros.</p></div><div class="row"><button id="enableNotifications" class="secondary" type="button">Ativar notificações</button><button id="refreshButton" class="secondary">Atualizar lista</button></div></div><div id="notificationBanner" class="notice-banner hidden" role="status" aria-live="polite"><div><strong id="notificationTitle">Nova solicitação recebida</strong><p id="notificationMessage">Uma nova solicitação chegou ao Crédito Ágil.</p></div><button id="dismissNotification" type="button" class="secondary">Dispensar</button></div>
-<div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select></div><div class="table-wrap"><table><thead><tr><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="7">Nenhuma consulta carregada.</td></tr></tbody></table></div>
+<div id="statsGrid" class="stats-grid" aria-label="Resumo das solicitações"><div class="stat-card"><span>Total de solicitações</span><strong id="statTotal">0</strong></div><div class="stat-card pending"><span>Pendentes</span><strong id="statPending">0</strong></div><div class="stat-card approved"><span>Aprovadas</span><strong id="statApproved">0</strong></div><div class="stat-card rejected"><span>Recusadas</span><strong id="statRejected">0</strong></div></div><div class="filters"><input id="searchApplications" type="search" placeholder="Buscar por nome, CPF, telefone ou e-mail" aria-label="Buscar solicitações"><select id="filterStatus" aria-label="Filtrar por status"><option value="Todos">Todos os status</option><option value="Pendente">Pendente</option><option value="Aprovado">Aprovado</option><option value="Recusado">Recusado</option></select></div><div class="bulk-tools"><span class="hint" id="bulkHint">Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico.</span><button type="button" id="bulkActionButton" disabled>Arquivar selecionados (0)</button><button type="button" id="toggleArchivedButton" class="secondary">Ver arquivados</button></div><div class="table-wrap"><table><thead><tr><th><input id="selectVisible" class="row-check" type="checkbox" aria-label="Selecionar todas as solicitações pendentes visíveis"></th><th>Recebido em</th><th>Cliente</th><th>Contato</th><th>CPF</th><th>Simulação</th><th>Renda / finalidade</th><th>Status</th></tr></thead><tbody id="applicationsBody"><tr><td colspan="8">Nenhuma consulta carregada.</td></tr></tbody></table></div>
 </section>
 <section id="detailOverlay" class="detail-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><div class="row" style="justify-content:space-between"><h2 id="detailTitle">Detalhes da solicitação</h2><button type="button" id="closeDetails" class="secondary">Fechar</button></div><p class="muted" id="detailReceived"></p><div id="detailGrid" class="detail-grid"></div><div class="detail-actions"><button type="button" id="closeDetailsBottom" class="secondary">Voltar à lista</button></div></div></section>
 <p class="muted">Proteja o acesso ao painel. Os dados pessoais devem ser acessados apenas para a finalidade informada ao cliente e conforme a LGPD.</p>
@@ -98,6 +106,73 @@
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDetails(); });
   function closeDetails() { document.getElementById('detailOverlay').classList.add('hidden'); }
   let allApplications = [];
+  let archivedView = false;
+  const selectedApplicationIds = new Set();
+  const ARCHIVE_STORAGE_KEY = 'creditoAgilArchivedPendingIds';
+  function loadArchivedIds() {
+    try { return new Set(JSON.parse(localStorage.getItem(ARCHIVE_STORAGE_KEY) || '[]').map(String)); }
+    catch (_) { return new Set(); }
+  }
+  let archivedApplicationIds = loadArchivedIds();
+  function persistArchivedIds() {
+    try { localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify([...archivedApplicationIds])); return true; }
+    catch (_) { setStatus('Não foi possível guardar os arquivamentos neste navegador. Verifique as configurações de armazenamento.'); return false; }
+  }
+  function updateBulkTools() {
+    const count = selectedApplicationIds.size;
+    const action = document.getElementById('bulkActionButton');
+    action.textContent = archivedView ? 'Restaurar selecionados (' + count + ')' : 'Arquivar selecionados (' + count + ')';
+    action.disabled = count === 0;
+    document.getElementById('toggleArchivedButton').textContent = archivedView ? 'Voltar à lista principal' : 'Ver arquivados (' + archivedApplicationIds.size + ')';
+    document.getElementById('bulkHint').textContent = archivedView
+      ? 'Arquivados ficam escondidos da lista principal, mas não são apagados do banco. Selecione para restaurar.'
+      : 'Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico deste navegador.';
+    document.getElementById('selectVisible').checked = false;
+  }
+  document.getElementById('bulkActionButton').addEventListener('click', () => {
+    if (!selectedApplicationIds.size) return;
+    if (archivedView) {
+      for (const id of selectedApplicationIds) archivedApplicationIds.delete(String(id));
+      if (!persistArchivedIds()) return;
+      setStatus('Solicitações restauradas na lista principal.');
+    } else {
+      const eligible = allApplications.filter(item => selectedApplicationIds.has(String(item.id)) && (item.status || 'Pendente') === 'Pendente');
+      if (!eligible.length) { setStatus('Só é possível arquivar solicitações com status Pendente.'); return; }
+      for (const item of eligible) archivedApplicationIds.add(String(item.id));
+      if (!persistArchivedIds()) return;
+      setStatus(eligible.length + ' solicitação(ões) pendente(s) arquivada(s) da lista principal. Nenhum registro foi apagado.');
+    }
+    selectedApplicationIds.clear();
+    renderApplications();
+  });
+  document.getElementById('toggleArchivedButton').addEventListener('click', () => {
+    archivedView = !archivedView;
+    selectedApplicationIds.clear();
+    renderApplications();
+  });
+  document.getElementById('selectVisible').addEventListener('change', (event) => {
+    const visible = getVisibleApplications();
+    for (const item of visible) {
+      const eligible = archivedView || (item.status || 'Pendente') === 'Pendente';
+      if (!eligible) continue;
+      if (event.target.checked) selectedApplicationIds.add(String(item.id));
+      else selectedApplicationIds.delete(String(item.id));
+    }
+    renderApplications();
+  });
+  function getVisibleApplications() {
+    const term = document.getElementById('searchApplications').value.trim().toLocaleLowerCase('pt-BR');
+    const chosenStatus = document.getElementById('filterStatus').value;
+    return allApplications.filter(item => {
+      const id = String(item.id);
+      const isArchived = archivedApplicationIds.has(id);
+      if (archivedView !== isArchived) return false;
+      const status = item.status || 'Pendente';
+      const matchesStatus = chosenStatus === 'Todos' || status === chosenStatus;
+      const searchable = [item.full_name, item.cpf, item.phone, item.email].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
+      return matchesStatus && searchable.includes(term);
+    });
+  }
   function updateStats(items) {
     document.getElementById('statTotal').textContent = items.length;
     document.getElementById('statPending').textContent = items.filter(item => (item.status || 'Pendente') === 'Pendente').length;
@@ -106,23 +181,33 @@
   }
   function renderApplications() {
     const body = document.getElementById('applicationsBody');
-    const term = document.getElementById('searchApplications').value.trim().toLocaleLowerCase('pt-BR');
-    const chosenStatus = document.getElementById('filterStatus').value;
-    const filtered = allApplications.filter(item => {
-      const status = item.status || 'Pendente';
-      const matchesStatus = chosenStatus === 'Todos' || status === chosenStatus;
-      const searchable = [item.full_name, item.cpf, item.phone, item.email].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
-      return matchesStatus && searchable.includes(term);
-    });
+    const filtered = getVisibleApplications();
     body.replaceChildren();
     if (!filtered.length) {
       const row = document.createElement('tr'); const cell = document.createElement('td');
-      cell.colSpan = 7; cell.className = 'empty-filter';
-      cell.textContent = allApplications.length ? 'Nenhuma solicitação corresponde à busca ou ao filtro.' : 'Ainda não há solicitações salvas.';
-      row.append(cell); body.append(row); return;
+      cell.colSpan = 8; cell.className = 'empty-filter';
+      cell.textContent = archivedView
+        ? 'Nenhuma solicitação arquivada corresponde à busca ou ao filtro.'
+        : (allApplications.length ? 'Nenhuma solicitação corresponde à busca ou ao filtro.' : 'Ainda não há solicitações salvas.');
+      body.append(row); row.append(cell); selectedApplicationIds.clear(); updateBulkTools(); return;
     }
     for (const item of filtered) {
       const row = document.createElement('tr');
+      const id = String(item.id);
+      const status = item.status || 'Pendente';
+      const selectionCell = document.createElement('td');
+      const check = document.createElement('input'); check.type = 'checkbox'; check.className = 'row-check';
+      check.checked = selectedApplicationIds.has(id);
+      check.setAttribute('aria-label', (archivedView ? 'Selecionar para restaurar ' : 'Selecionar para arquivar ') + (item.full_name || 'solicitação'));
+      check.disabled = !archivedView && status !== 'Pendente';
+      check.title = check.disabled ? 'Somente solicitações pendentes podem ser arquivadas.' : '';
+      check.addEventListener('change', () => {
+        if (check.checked) selectedApplicationIds.add(id); else selectedApplicationIds.delete(id);
+        updateBulkTools();
+        document.getElementById('bulkActionButton').disabled = selectedApplicationIds.size === 0;
+        document.getElementById('bulkActionButton').textContent = archivedView ? 'Restaurar selecionados (' + selectedApplicationIds.size + ')' : 'Arquivar selecionados (' + selectedApplicationIds.size + ')';
+      });
+      selectionCell.append(check); row.append(selectionCell);
       const cells = [
         new Date(item.created_at).toLocaleString('pt-BR'),
         item.full_name || '—',
@@ -168,9 +253,11 @@
       });
       const detailButton = document.createElement('button'); detailButton.type = 'button'; detailButton.className = 'detail-btn'; detailButton.textContent = 'Ver detalhes';
       detailButton.addEventListener('click', () => showDetails(item));
+      if (archivedView) { const archived = document.createElement('span'); archived.className = 'archive-badge'; archived.textContent = 'Arquivado'; statusCell.append(archived, document.createElement('br')); }
       statusCell.append(statusSelect, document.createTextNode(' '), saveButton, document.createElement('br'), detailButton);
       row.append(statusCell); body.append(row);
     }
+    updateBulkTools();
   }
   function notifyNewApplication(count) {
     const banner = document.getElementById('notificationBanner');
