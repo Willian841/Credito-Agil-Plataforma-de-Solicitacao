@@ -135,18 +135,30 @@
       : 'Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico deste navegador.';
     document.getElementById('selectVisible').checked = false;
   }
-  document.getElementById('bulkActionButton').addEventListener('click', () => {
+  document.getElementById('bulkActionButton').addEventListener('click', async () => {
     if (!selectedApplicationIds.size) return;
     if (archivedView) {
-      for (const id of selectedApplicationIds) archivedApplicationIds.delete(String(id));
-      if (!persistArchivedIds()) return;
-      setStatus('Solicitações restauradas na lista principal.');
+      const ids = [...selectedApplicationIds].map(String);
+      const { error } = await supabaseClient.from('admin_application_archive').delete().in('application_id', ids);
+      for (const id of ids) archivedApplicationIds.delete(id);
+      persistArchivedIds();
+      if (error) setStatus('Registros restaurados neste navegador. Para sincronizar entre dispositivos, execute a migração SQL do painel no Supabase.');
+      else {
+        for (const id of ids) await supabaseClient.from('admin_application_events').insert({application_id:id,event_type:'restored',details:'Solicitação restaurada da lixeira'});
+        setStatus('Solicitações restauradas na lista principal.');
+      }
     } else {
       const eligible = allApplications.filter(item => selectedApplicationIds.has(String(item.id)) && (item.status || 'Pendente') === 'Pendente');
       if (!eligible.length) { setStatus('Só é possível arquivar solicitações com status Pendente.'); return; }
-      for (const item of eligible) archivedApplicationIds.add(String(item.id));
-      if (!persistArchivedIds()) return;
-      setStatus(eligible.length + ' solicitação(ões) pendente(s) arquivada(s) da lista principal. Nenhum registro foi apagado.');
+      const ids = eligible.map(item => String(item.id));
+      const { error } = await supabaseClient.from('admin_application_archive').insert(ids.map(application_id => ({application_id})));
+      for (const id of ids) archivedApplicationIds.add(id);
+      persistArchivedIds();
+      if (error) setStatus(eligible.length + ' solicitação(ões) arquivada(s) neste navegador. Para compartilhar a lixeira, execute a migração SQL do painel no Supabase.');
+      else {
+        for (const id of ids) await supabaseClient.from('admin_application_events').insert({application_id:id,event_type:'archived',details:'Solicitação arquivada'});
+        setStatus(eligible.length + ' solicitação(ões) arquivada(s). Nenhum registro foi apagado.');
+      }
     }
     selectedApplicationIds.clear();
     renderApplications();
@@ -382,6 +394,11 @@
     }
     const payoutByApplication = new Map((payoutRows || []).map(row => [row.application_id, row]));
     const freshData = (data || []).map(item => ({ ...item, payout_details: payoutByApplication.get(item.id) || null }));
+    const { data: archiveRows, error: archiveError } = await supabaseClient.from('admin_application_archive').select('application_id');
+    if (!archiveError) {
+      archivedApplicationIds = new Set((archiveRows || []).map(row => String(row.application_id)));
+      persistArchivedIds();
+    }
     if (!notificationsInitialized) {
       knownApplicationIds = new Set(freshData.map(item => String(item.id)));
       notificationsInitialized = true;
