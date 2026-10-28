@@ -53,7 +53,7 @@ alter table public.admin_application_notes enable row level security;
 alter table public.admin_application_events enable row level security;
 alter table public.admin_application_archive enable row level security;
 
-revoke all on public.admin_application_notes, public.admin_application_events, public.admin_application_archive from anon, authenticated;
+revoke all on public.admin_application_notes, public.admin_application_events, public.admin_application_archive from public, anon, authenticated;
 grant select, insert on public.admin_application_notes to authenticated;
 grant select, insert on public.admin_application_events to authenticated;
 grant select, insert, delete on public.admin_application_archive to authenticated;
