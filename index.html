@@ -384,6 +384,15 @@
       .negative-highlight{font-size:.9rem}
     }
 
+
+    .negative-highlight{display:flex!important;align-items:center;gap:16px;grid-template-columns:none!important;margin:0!important;padding:23px!important;max-width:none!important;background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#243b53!important}
+    .negative-highlight:before{display:none!important}
+    .negative-icon{flex:0 0 54px;width:54px;height:54px;display:grid;place-items:center;border-radius:50%;background:#e7efff;color:#1258ce;font-size:1.5rem;font-weight:800}
+    .negative-copy{display:grid;gap:7px;min-width:0}
+    .negative-highlight strong{color:#0a1f38!important;font-size:1.12rem!important;line-height:1.3}
+    .negative-highlight span{color:#52677e!important;font-size:.91rem;line-height:1.5}
+    @media(max-width:800px){.negative-highlight{padding:18px!important;align-items:flex-start}.negative-icon{flex-basis:42px;width:42px;height:42px;font-size:1.2rem}}
+
 </style>
 </head>
 <body>
@@ -420,10 +429,25 @@
       </div>
     </section>
 
+    <section class="negative-band" aria-label="Informações para quem está negativado">
+      <div class="container negative-band-grid">
+        <div class="negative-highlight">
+          <span class="negative-icon" aria-hidden="true">✓</span>
+          <div class="negative-copy">
+            <strong>Está negativado e precisa de crédito?</strong>
+            <span>Você também pode consultar as opções disponíveis e enviar uma solicitação para análise. A aprovação depende dos critérios da instituição responsável.</span>
+          </div>
+        </div>
+        <div class="negative-security">
+          <span aria-hidden="true">✓</span>
+          <div><strong>Informações claras</strong><p>A solicitação não garante aprovação ou liberação de crédito.</p></div>
+        </div>
+      </div>
+    </section>
+
     <section class="benefit-strip" aria-label="Informações importantes">
       <div class="container benefit-strip-grid">
-        <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">⌁</span><span><strong>Simulação gratuita</strong><section class="negative-band"><div class="container negative-band-grid"><div class="negative-highlight"><strong>Está negativado e precisa de crédito?</strong><span>Você também pode consultar as opções disponíveis e enviar uma solicitação para análise. A aprovação depende dos critérios da instituição responsável.</span></div><div class="negative-security"><span>✓</span><div><strong>Informações claras</strong><p>A aprovação depende dos critérios da instituição responsável.</p></div></div></div></section>
-<small>Consulte valores sem compromisso</small></span></div>
+        <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">⌁</span><span><strong>Simulação gratuita</strong><small>Consulte valores sem compromisso</small></span></div>
         <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">◷</span><span><strong>Você decide o próximo passo</strong><small>Revise os dados antes de enviar</small></span></div>
         <div class="benefit-point"><span class="benefit-point-icon" aria-hidden="true">✓</span><span><strong>Transparência primeiro</strong><small>Estimativas claramente identificadas</small></span></div>
       </div>
