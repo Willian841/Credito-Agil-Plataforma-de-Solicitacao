@@ -326,6 +326,8 @@
       .hero-card{transform:none}
     }
 
+      .hero-office-photo{position:relative;margin:-30px -30px 24px;overflow:hidden;border-radius:24px 24px 0 0;height:190px;background:#eaf3ff}.hero-office-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%}.hero-office-photo span{position:absolute;left:14px;bottom:12px;padding:8px 12px;border-radius:999px;background:rgba(7,25,47,.82);color:#fff;font-size:.78rem;font-weight:700;backdrop-filter:blur(6px)}
+    @media(max-width:500px){.hero-office-photo{height:155px;margin:-20px -20px 20px}}
   </style>
 </head>
 <body>
@@ -360,6 +362,7 @@
           </div>
         </div>
         <div class="hero-card" id="simulador">
+          <div class="hero-office-photo"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1100&q=82" alt="Consultor financeiro conversando com uma cliente em um escritório moderno" loading="eager" fetchpriority="high"><span>Atendimento próximo, com transparência</span></div>
           <div class="card-top"><h2>Simule seu empréstimo</h2><span class="pill">Grátis</span></div>
           <label class="amount-label" for="loanAmount">Qual valor você precisa?</label>
           <div class="amount-display" id="amountDisplay">R$ 2.000,00</div>
