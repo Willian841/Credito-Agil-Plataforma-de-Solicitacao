@@ -194,6 +194,75 @@
     @media(max-width:800px){.hero{padding:58px 0 54px}.hero-grid{gap:34px}.hero h1{font-size:clamp(2.55rem,8vw,3.6rem)}.section{padding:62px 0}}
     @media(max-width:500px){.hero-card,.form-card{padding:22px}.hero h1{letter-spacing:-1.5px}.tracking-band{padding:22px}}
 
+  
+    /* Correções finais para celulares: impedem largura mínima e conteúdo cortado */
+    html,body{width:100%;max-width:100%;overflow-x:hidden}
+    img,svg,video,canvas{max-width:100%;height:auto}
+    .container{width: min(100% - 28px, 1120px)}
+    .hero-grid,.application-grid{grid-template-columns:minmax(0,1fr);min-width:0;gap:28px}
+    .hero-grid>* ,.application-grid>*{min-width:0;max-width:100%}
+    .hero-card,.form-card,.tracking-band,.cta{min-width:0;max-width:100%}
+    .hero-card{transform:none}
+    .monthly{font-size:clamp(1.45rem,7vw,2rem);overflow-wrap:anywhere}
+    .amount-display{font-size:clamp(1.7rem,8vw,2.2rem);overflow-wrap:anywhere}
+    .result{min-width:0;overflow-wrap:anywhere}
+    .result small,.result-foot{display:block;overflow-wrap:anywhere}
+    .nav{gap:8px}
+    .nav-links{gap:8px}
+    .nav-links .btn{white-space:normal;text-align:center;line-height:1.2}
+    .floating-whatsapp{max-width:calc(100vw - 24px)}
+    @media(max-width:600px){
+      .container{width:calc(100% - 28px)}
+      .hero{padding:38px 0 34px}
+      .hero-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+      .hero h1{font-size:clamp(2.15rem,9vw,3rem);line-height:1.12;letter-spacing:-1.2px;overflow-wrap:break-word}
+      .hero-copy{font-size:1rem}
+      .hero-actions{display:grid;grid-template-columns:1fr}
+      .hero-actions .btn{width:100%}
+      .trust-row{display:grid;grid-template-columns:1fr;gap:8px}
+      .hero-card{padding:18px;border-radius:20px;margin:0}
+      .card-top{align-items:flex-start;flex-wrap:wrap}
+      .card-top h2{font-size:1.05rem}
+      .amount-label{margin-top:18px}
+      .amount-display{font-size:1.9rem;letter-spacing:-.7px}
+      .result{padding:15px;margin-top:18px}
+      .monthly{font-size:1.75rem;line-height:1.25}
+      .result-foot{font-size:.78rem;line-height:1.45}
+      .section{padding:48px 0}
+      .section-head{text-align:left;margin-bottom:25px}
+      .section-head h2{font-size:clamp(1.8rem,7vw,2.35rem)}
+      #como-funciona .features{grid-template-columns:minmax(0,1fr);gap:14px}
+      #como-funciona .feature{padding:22px;min-height:0}
+      #solicitacao .application-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+      .application-info h2{font-size:2rem}
+      .form-card{padding:19px;border-radius:19px}
+      .form-grid{grid-template-columns:minmax(0,1fr);gap:0}
+      .form-grid .full{grid-column:1}
+      .form-card input:not([type=range]),.form-card select{min-width:0;width:100%;font-size:16px}
+      .consent{align-items:flex-start;line-height:1.5}
+      .consent input{flex:0 0 auto;width:18px;height:18px}
+      .tracking-band{padding:20px;gap:15px}
+      .tracking-band:after{display:none}
+      .tracking-band .btn{width:100%;text-align:center}
+      .cta{padding:23px;border-radius:18px}
+      .cta .btn{white-space:normal}
+      .nav{min-height:64px}
+      .brand{gap:7px;font-size:.94rem}
+      .brand-mark{width:34px;height:34px;flex:0 0 34px}
+      .nav-links{flex:0 0 auto}
+      .nav-links .btn{max-width:125px;padding:10px 11px;font-size:.78rem}
+      .footer-top{flex-direction:column}
+      .floating-whatsapp{right:10px;bottom:10px;padding:10px 13px;font-size:.82rem}
+    }
+    @media(max-width:360px){
+      .container{width:calc(100% - 22px)}
+      .hero-card,.form-card{padding:15px}
+      .nav-links .btn{max-width:110px;font-size:.72rem}
+      .brand{font-size:.85rem}
+      .amount-display{font-size:1.65rem}
+      .monthly{font-size:1.55rem}
+    }
+
   </style>
 </head>
 <body>
