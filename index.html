@@ -263,6 +263,40 @@
       .monthly{font-size:1.55rem}
     }
 
+  
+    /* Termos e consentimentos: texto sempre dentro da largura do celular */
+    .consent{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      font-size:clamp(.82rem,2.7vw,.9rem);
+      line-height:1.55;
+      overflow-wrap:break-word;
+    }
+    .consent input{
+      flex:0 0 18px;
+      width:18px;
+      min-width:18px;
+      height:18px;
+      margin:3px 0 0;
+    }
+    .consent span{
+      display:block;
+      flex:1 1 0;
+      min-width:0;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      word-break:normal;
+    }
+    .form-card,.form-grid,.field{min-width:0;max-width:100%}
+    @media(max-width:500px){
+      .consent{gap:9px;font-size:.82rem;line-height:1.55}
+      .consent span{max-width:100%}
+    }
+
   </style>
 </head>
 <body>
