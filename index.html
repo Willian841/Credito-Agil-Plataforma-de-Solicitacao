@@ -401,6 +401,20 @@
     .hero .hero-actions .btn-outline:hover{background:#f2f7fd!important;border-color:#1264e8!important;color:#084db7!important}
     @media(max-width:500px){.hero .hero-actions{display:grid;grid-template-columns:1fr}.hero .hero-actions .btn{width:100%}}
 
+
+/* Usabilidade em Android e telas sensíveis ao toque */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,input,select,textarea{font-size:16px;max-width:100%}
+button,.btn,input[type="checkbox"],input[type="radio"],select{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #8bbcff;outline-offset:3px}
+img{max-width:100%}
+@media(max-width:600px){
+ .container{width:min(100% - 24px, var(--container-width, 1180px))}
+ input:not([type="checkbox"]):not([type="radio"]),select,textarea{min-height:46px}
+ .btn,button{min-height:46px}
+ .hero-card,.feature,.form-card{min-width:0}
+}
+
 </style>
 </head>
 <body>
