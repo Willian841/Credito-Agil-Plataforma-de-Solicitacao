@@ -299,6 +299,33 @@
       .consent span{max-width:100%}
     }
 
+  
+    /* Ajustes finais de legibilidade, marca e responsividade */
+    .negative-highlight{
+      background:linear-gradient(135deg,#eff7ff,#ffffff);
+      border:1px solid #c7dcf5;
+      border-left:4px solid #16835b;
+      box-shadow:0 12px 30px rgba(8,31,56,.07);
+      color:#243b53;
+    }
+    .negative-highlight strong{color:#0a1f38;font-size:1.02rem}
+    .negative-highlight span{color:#52677e}
+    .brand-logo-symbol{background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 2px #00000016)}
+    .brand-wordmark{letter-spacing:-.35px}
+    .brand-wordmark b{color:#18b777}
+    .brand:focus-visible{outline-offset:5px}
+    .hero .eyebrow{box-shadow:inset 0 0 0 1px #cfe2fa}
+    .trust-seal{box-shadow:0 8px 24px rgba(8,31,56,.04)}
+    .feature,.form-card,.tracking-band,details{box-shadow:0 10px 30px rgba(8,31,56,.035)}
+    .btn{min-height:46px}
+    @media(max-width:500px){
+      .brand{gap:7px;font-size:.94rem}
+      .brand-logo-symbol{width:38px;height:38px;flex-basis:38px}
+      .negative-highlight{padding:14px}
+      .hero-grid{gap:26px}
+      .hero-card{transform:none}
+    }
+
   </style>
 </head>
 <body>
