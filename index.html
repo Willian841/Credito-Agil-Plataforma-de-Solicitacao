@@ -18,6 +18,7 @@
     .nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
     .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:850;font-size:1.15rem;color:var(--navy);letter-spacing:-.4px}
     .brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#1688ff,#0648b8);color:white;font-size:1.25rem;box-shadow:0 7px 18px #0b5ed733}
+    .brand-logo-symbol{display:block;padding:0;background:transparent;box-shadow:none;border-radius:0;width:46px;height:46px;flex:0 0 46px}.brand-wordmark{white-space:nowrap}.brand-wordmark b{color:#18a663;font-weight:900}
     .nav-links{display:flex;align-items:center;gap:26px}
     .nav-links a{text-decoration:none;color:#486581;font-size:.94rem;font-weight:650}
     .nav-links a:hover{color:var(--blue)}
@@ -105,7 +106,7 @@
     footer p{color:#a8bfd5;font-size:.85rem;max-width:600px}
     .footer-bottom{border-top:1px solid #29415a;margin-top:25px;padding-top:17px;color:#a8bfd5;font-size:.78rem}
     @media(max-width:800px){.hero-grid,.application-grid{grid-template-columns:1fr;gap:30px}.hero{padding:50px 0}.features{grid-template-columns:1fr}.nav-links a:not(.btn){display:none}.section{padding:58px 0}.application-info h2{font-size:1.9rem}.cta{align-items:flex-start;flex-direction:column;padding:28px}}
-    @media(max-width:500px){.container{width:min(100% - 28px,1120px)}.nav{min-height:66px}.brand{font-size:1rem}.brand-mark{width:36px;height:36px}.nav-links .btn{padding:10px 12px;font-size:.82rem}.hero-card,.form-card{padding:20px}.hero-actions .btn{width:100%}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.amount-display{font-size:2rem}.trust-row{gap:10px;flex-direction:column}}
+    @media(max-width:500px){.container{width:min(100% - 28px,1120px)}.nav{min-height:66px}.brand{font-size:1rem}.brand-mark{width:36px;height:36px}.brand-logo-symbol{width:40px;height:40px;flex-basis:40px}.nav-links .btn{padding:10px 12px;font-size:.82rem}.hero-card,.form-card{padding:20px}.hero-actions .btn{width:100%}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.amount-display{font-size:2rem}.trust-row{gap:10px;flex-direction:column}}
   
     /* Redesign visual principal: identidade azul-marinho e azul elétrico */
     :root{--blue:#1264e8;--blue-dark:#0845a7;--navy:#0a1f38;--sky:#eaf3ff;--ink:#243b53;--muted:#5d728a;--line:#d6e2f0;--green:#16835b;--shadow:0 22px 60px rgba(8,31,56,.13)}
@@ -303,7 +304,7 @@
 <body>
   <header>
     <div class="container nav">
-      <a class="brand" href="#" aria-label="Crédito Ágil, início"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a>
+      <a class="brand" href="#" aria-label="Crédito Ágil, início"><svg class="brand-mark brand-logo-symbol" viewBox="0 0 64 64" role="img" aria-label="Símbolo Crédito Ágil" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="caLogo" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1264e8"/><stop offset="1" stop-color="#09a35b"/></linearGradient></defs><path d="M9 34c2-9 8-15 17-15h4l-6 10h-3c-3 0-5 2-6 5-1 4 1 7 5 7h5c7 0 12-4 16-10l7-12h10L46 42C40 51 31 56 20 56 8 56 3 46 9 34Z" fill="#1264a3"/><path d="M39 5h15L43 25h11L29 54l7-21H24L39 5Z" fill="url(#caLogo)"/><path d="M30 47c8 5 18 3 26-4l-2-5 8 1-1 9-3-3c-9 9-21 12-31 7" fill="#1264a3"/></svg><span class="brand-wordmark">Crédito <b>Ágil</b></span></a>
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="#como-funciona">Como funciona</a>
         <a href="#duvidas">Dúvidas</a>
@@ -444,7 +445,7 @@
   <a class="floating-whatsapp" href="https://wa.me/5577988535882" target="_blank" rel="noopener noreferrer" aria-label="Falar com o atendimento pelo WhatsApp"><span aria-hidden="true">◉</span> Falar com atendimento</a>\n  <footer>
     <div class="container">
       <div class="footer-top">
-        <div><a class="brand" href="#"><span class="brand-mark">C+</span><span>Crédito Ágil</span></a><p>Site para simulação de parcelas. Ainda não oferece, aprova ou concede empréstimos.</p></div>
+        <div><a class="brand" href="#" aria-label="Crédito Ágil, início"><svg class="brand-mark brand-logo-symbol" viewBox="0 0 64 64" role="img" aria-label="Símbolo Crédito Ágil" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="caLogo" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1264e8"/><stop offset="1" stop-color="#09a35b"/></linearGradient></defs><path d="M9 34c2-9 8-15 17-15h4l-6 10h-3c-3 0-5 2-6 5-1 4 1 7 5 7h5c7 0 12-4 16-10l7-12h10L46 42C40 51 31 56 20 56 8 56 3 46 9 34Z" fill="#1264a3"/><path d="M39 5h15L43 25h11L29 54l7-21H24L39 5Z" fill="url(#caLogo)"/><path d="M30 47c8 5 18 3 26-4l-2-5 8 1-1 9-3-3c-9 9-21 12-31 7" fill="#1264a3"/></svg><span class="brand-wordmark">Crédito <b>Ágil</b></span></a><p>Site para simulação de parcelas. Ainda não oferece, aprova ou concede empréstimos.</p></div>
         <div><strong>Importante</strong><p>Confira todas as condições antes de contratar crédito. Não pague taxas antecipadas para liberar empréstimo sem verificar a legitimidade da instituição.</p></div>
       </div>
       <div class="footer-bottom">© <span id="year"></span> Crédito Ágil. | Os dados só serão compartilhados se você confirmar o envio da mensagem no WhatsApp.</div>
