@@ -134,6 +134,8 @@
       ? 'Arquivados ficam escondidos da lista principal, mas não são apagados do banco. Selecione para restaurar.'
       : 'Selecione solicitações pendentes para arquivá-las da lista principal. Os registros continuam salvos no histórico deste navegador.';
     document.getElementById('selectVisible').checked = false;
+    const bulkStatusButton = document.getElementById('bulkStatusButton');
+    if (bulkStatusButton) { bulkStatusButton.disabled = count === 0; bulkStatusButton.textContent = 'Aplicar aos selecionados (' + count + ')'; }
   }
   document.getElementById('bulkActionButton').addEventListener('click', async () => {
     if (!selectedApplicationIds.size) return;
